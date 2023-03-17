@@ -17,7 +17,7 @@ void Field::Initialize()
 		{0,0,0,0,0,0,0},
 		{0,0,0,0,0,0,0},
 		{0,0,0,0,0,0,0},
-		{1,0,0,0,0,0,0}
+		{1,0,0,0,0,0,-1}
 	};
 
 	for (int i = 0; i < gridY; i++) {
@@ -45,6 +45,7 @@ void Field::Draw()
 		for (int j = 0; j < gridX; j++) {
 			if (map[i][j] != 0) {
 				if (map[i][j] == -1) {
+					DrawBox(j * 100,i * 100,(j + 1) * 100,(i + 1) * 100,GetColor(255,255,255),true);
 					break;
 				}
 
