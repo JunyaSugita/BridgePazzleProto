@@ -53,7 +53,7 @@ void Field::Draw()
 				//‚Â‚È‚ª‚è
 				//‰E
 				for (int k = j + 1; k < gridX; k++) {
-					if (map[i][k] != 0 && map[i][j] != -1) {
+					if (map[i][k] != 0 && map[i][k] != -1) {
 						count++;
 						break;
 					}
