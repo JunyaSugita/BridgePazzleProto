@@ -11,13 +11,13 @@ Field::~Field()
 void Field::Initialize()
 {
 	int tempMap[gridY][gridX] = {
-		{1,0,0,0,0,0,1},
+		{-1,0,0,0,0,0,0},
+		{0,0,0,1,0,0,0},
 		{0,0,0,0,0,0,0},
+		{0,1,0,2,0,2,0},
 		{0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0},
-		{1,0,0,0,0,0,-1}
+		{0,0,0,0,0,2,0},
+		{0,0,0,0,0,0,0}
 	};
 
 	for (int i = 0; i < gridY; i++) {
@@ -46,34 +46,34 @@ void Field::Draw()
 			if (map[i][j] != 0) {
 				if (map[i][j] == -1) {
 					DrawBox(j * 100,i * 100,(j + 1) * 100,(i + 1) * 100,GetColor(255,255,255),true);
-					break;
+					continue;
 				}
 
 				int count = 0;
 				//‚Â‚È‚ª‚è
 				//‰E
 				for (int k = j + 1; k < gridX; k++) {
-					if (map[i][k] != 0) {
+					if (map[i][k] != 0 && map[i][j] != -1) {
 						count++;
 					}
 				}
 				//‰º
 				for (int k = i + 1; k < gridY; k++) {
-					if (map[k][j] != 0) {
+					if (map[k][j] != 0 && map[k][j] != -1) {
 						count++;
 					}
 				}
 				
 				//¶
 				for (int k = j - 1; k >= 0; k--) {
-					if (map[i][k] != 0) {
+					if (map[i][k] != 0 && map[i][k] != -1) {
 						DrawLine(j * 100 + 50, i * 100 + 50, k * 100 + 50, i * 100 + 50, GetColor(255, 255, 0),5);
 						count++;
 					}
 				}
 				//ã
 				for (int k = i - 1; k >= 0; k--) {
-					if (map[k][j] != 0) {
+					if (map[k][j] != 0 && map[k][j] != -1) {
 						DrawLine(j * 100 + 50, i * 100 + 50, j * 100 + 50, k * 100 + 50, GetColor(255, 255, 0),5);
 						count++;
 					}
