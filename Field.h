@@ -16,8 +16,8 @@ public:
 	void SetMapNum(int x, int y, int num);
 
 public:
-	static const int gridX = 7;
-	static const int gridY = 7;
+	static const int gridX = 5;
+	static const int gridY = 5;
 
 	int map[gridY][gridX];
 };

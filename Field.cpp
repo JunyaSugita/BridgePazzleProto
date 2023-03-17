@@ -11,13 +11,11 @@ Field::~Field()
 void Field::Initialize()
 {
 	int tempMap[gridY][gridX] = {
-		{-1,0,0,0,0,0,0},
-		{0,0,0,1,0,0,0},
-		{0,0,0,0,0,0,0},
-		{0,1,0,2,0,2,0},
-		{0,0,0,0,0,0,0},
-		{0,0,0,0,0,2,0},
-		{0,0,0,0,0,0,0}
+		{2,0,11,0,0},
+		{12,0,0,0,0},
+		{0,0,0,0,0},
+		{11,0,0,0,0},
+		{2,0,12,0,0}
 	};
 
 	for (int i = 0; i < gridY; i++) {
@@ -82,18 +80,36 @@ void Field::Draw()
 						break;
 					}
 				}
-				//発電機
-				if (count == map[i][j]) {
-					DrawCircle(j * 100 + 50, i * 100 + 50, 50, GetColor(200, 200, 0));
-					DrawFormatString(j * 100 + 40, i * 100 + 40, GetColor(255, 255, 255), "%d", map[i][j]);
+
+				if (map[i][j] < 10) {
+					//発電機
+					if (count == map[i][j]) {
+						DrawCircle(j * 100 + 50, i * 100 + 50, 50, GetColor(200, 200, 0));
+						DrawFormatString(j * 100 + 40, i * 100 + 40, GetColor(255, 255, 255), "%d", map[i][j]);
+					}
+					else if (count > map[i][j]) {
+						DrawCircle(j * 100 + 50, i * 100 + 50, 50, GetColor(200, 0, 0));
+						DrawFormatString(j * 100 + 40, i * 100 + 40, GetColor(255, 255, 255), "%d", map[i][j]);
+					}
+					else if (count < map[i][j]) {
+						DrawCircle(j * 100 + 50, i * 100 + 50, 50, GetColor(0, 0, 200));
+						DrawFormatString(j * 100 + 40, i * 100 + 40, GetColor(255, 255, 255), "%d", map[i][j]);
+					}
 				}
-				else if (count > map[i][j]) {
-					DrawCircle(j * 100 + 50, i * 100 + 50, 50, GetColor(200, 0, 0));
-					DrawFormatString(j * 100 + 40, i * 100 + 40, GetColor(255, 255, 255), "%d", map[i][j]);
-				}
-				else if (count < map[i][j]) {
-					DrawCircle(j * 100 + 50, i * 100 + 50, 50, GetColor(0, 0, 200));
-					DrawFormatString(j * 100 + 40, i * 100 + 40, GetColor(255, 255, 255), "%d", map[i][j]);
+				else {
+					//発電機
+					if (count == map[i][j] - 10) {
+						DrawBox(j * 100, i * 100, (j + 1) * 100, (i + 1) * 100, GetColor(200, 200, 0), true);
+						DrawFormatString(j * 100 + 40, i * 100 + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
+					}
+					else if (count > map[i][j] - 10) {
+						DrawBox(j * 100, i * 100, (j + 1) * 100, (i + 1) * 100, GetColor(200, 0, 0), true);
+						DrawFormatString(j * 100 + 40, i * 100 + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
+					}
+					else if (count < map[i][j] - 10) {
+						DrawBox(j * 100, i * 100, (j + 1) * 100, (i + 1) * 100, GetColor(0, 0, 200), true);
+						DrawFormatString(j * 100 + 40, i * 100 + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
+					}
 				}
 
 			}

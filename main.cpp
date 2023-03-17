@@ -6,10 +6,10 @@
 const char TITLE[] = "BridgePazzleProto";
 
 // ウィンドウ横幅
-const int WIN_WIDTH = 700;
+const int WIN_WIDTH = 500;
 
 // ウィンドウ縦幅
-const int WIN_HEIGHT = 700;
+const int WIN_HEIGHT = 500;
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,
                    _In_ int nCmdShow) {
