@@ -55,12 +55,14 @@ void Field::Draw()
 				for (int k = j + 1; k < gridX; k++) {
 					if (map[i][k] != 0 && map[i][j] != -1) {
 						count++;
+						break;
 					}
 				}
 				//‰º
 				for (int k = i + 1; k < gridY; k++) {
 					if (map[k][j] != 0 && map[k][j] != -1) {
 						count++;
+						break;
 					}
 				}
 				
@@ -69,6 +71,7 @@ void Field::Draw()
 					if (map[i][k] != 0 && map[i][k] != -1) {
 						DrawLine(j * 100 + 50, i * 100 + 50, k * 100 + 50, i * 100 + 50, GetColor(255, 255, 0),5);
 						count++;
+						break;
 					}
 				}
 				//ã
@@ -76,6 +79,7 @@ void Field::Draw()
 					if (map[k][j] != 0 && map[k][j] != -1) {
 						DrawLine(j * 100 + 50, i * 100 + 50, j * 100 + 50, k * 100 + 50, GetColor(255, 255, 0),5);
 						count++;
+						break;
 					}
 				}
 				//”­“d‹@
