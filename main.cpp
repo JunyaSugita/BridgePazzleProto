@@ -1,15 +1,16 @@
 #include "DxLib.h"
 #include "Field.h"
 #include "Generator.h"
+#include "GrovalSetting.h"
 
 // ウィンドウのタイトルに表示する文字列
 const char TITLE[] = "BridgePazzleProto";
 
 // ウィンドウ横幅
-const int WIN_WIDTH = 500;
+const int WIN_WIDTH = gridX * 100;
 
 // ウィンドウ縦幅
-const int WIN_HEIGHT = 500;
+const int WIN_HEIGHT = gridY * 100;
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,
                    _In_ int nCmdShow) {

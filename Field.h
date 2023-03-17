@@ -1,5 +1,6 @@
 #pragma once
 #include "DxLib.h"
+#include "GrovalSetting.h"
 
 class Field
 {
@@ -16,9 +17,6 @@ public:
 	void SetMapNum(int x, int y, int num);
 
 public:
-	static const int gridX = 5;
-	static const int gridY = 5;
-
 	int map[gridY][gridX];
 };
 
