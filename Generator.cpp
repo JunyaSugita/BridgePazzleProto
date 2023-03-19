@@ -13,6 +13,64 @@ void Generator::Initialize(Field* field)
 	field_ = field;
 	have_ = false;
 	haveNum_ = 0;
+
+	//‚·‚Å‚É‚ ‚é‚â‚Â‚ð‚Â‚È‚®
+	for (int i = 0; i < gridY; i++) {
+		for (int j = 0; j < gridX; j++) {
+			if (field_->map[i][j] > 0 && field_->map[i][j] < 20) {
+				//Œq‚ª‚èŒŸõ
+				//ã
+				for (int k = i - 1; k >= 0; k--) {
+					if (field->map[k][j] < 20 && field->map[k][j] >= 1) {
+						for (int l = k + 1; l < i; l++) {
+							field_->SetMapNum(j, l, 20);
+						}
+						break;
+					}
+					else if (field->map[k][j] != 0) {
+						break;
+					}
+				}
+				//‰º
+				for (int k = i + 1; k < gridY; k++) {
+					if (field->map[k][j] < 20 && field->map[k][j] >= 1) {
+						for (int l = k - 1; l > i; l--) {
+							field_->SetMapNum(j, l, 20);
+						}
+						break;
+					}
+					else if (field->map[k][j] != 0) {
+						break;
+					}
+				}
+
+				//¶
+				for (int k = j - 1; k >= 0; k--) {
+					if (field->map[i][k] < 20 && field->map[i][k] >= 1) {
+						for (int l = k + 1; l < j; l++) {
+							field_->SetMapNum(l, i, 21);
+						}
+						break;
+					}
+					else if (field->map[i][k] != 0) {
+						break;
+					}
+				}
+				//‰E
+				for (int k = j + 1; k < gridX; k++) {
+					if (field->map[i][k] < 20 && field->map[i][k] >= 1) {
+						for (int l = k - 1; l > j; l--) {
+							field_->SetMapNum(l, i, 21);
+						}
+						break;
+					}
+					else if (field->map[i][k] != 0) {
+						break;
+					}
+				}
+			}
+		}
+	}
 }
 
 void Generator::Update(Field* field)
