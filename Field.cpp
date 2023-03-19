@@ -11,6 +11,12 @@ Field::~Field()
 void Field::Initialize()
 {
 	//マップの生成(csv対応予定)
+	// -1 壁
+	// 00 空間
+	// 1桁目　0 = 動かせる発電機(2桁目1~9まで)	
+	// 1桁目　1 = 動かせない発電機(2桁目1~9まで)
+	// 1桁目　2 = 初期の配線(2桁目 0 = 縦配線　　1 = 横配線)
+
 	int tempMap[gridY][gridX] = {
 		{02,00,00,00,00},
 		{00,01,00,00,00},
@@ -66,7 +72,7 @@ void Field::Draw()
 					if (map[i][k] == -1) {
 						break;
 					}
-					if (map[i][k] > 0 && map[i][j] < 20) {
+					if (map[i][k] > 0 && map[i][k] < 20) {
 						count++;
 						break;
 					}
