@@ -31,5 +31,6 @@ public:
 
 public:
 	int map[gridY][gridX];
+	bool shortMap[gridY][gridX];
 };
 

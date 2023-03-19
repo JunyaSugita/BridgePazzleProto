@@ -15,6 +15,9 @@ public:
 public:
 	Field* field_;
 	int mouseX, mouseY;
+	int mouseMapPointX, mouseMapPointY;
+
 	int haveNum_;
 	bool have_;
+	int oldHavePosX_, oldHavePosY_;
 };
