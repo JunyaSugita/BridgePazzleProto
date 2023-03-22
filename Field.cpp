@@ -143,9 +143,11 @@ void Field::Draw()
 					}
 				}
 			}
+			//ècÇÃîzê¸
 			else if (map[i][j] == 20) {
 				DrawBox(j * 100 + 40, i * 100, (j + 1) * 100 - 40, (i + 1) * 100, GetColor(200, 200, 0), true);
 			}
+			//â°ÇÃîzê¸
 			else if (map[i][j] == 21) {
 				DrawBox(j * 100, i * 100 + 40, (j + 1) * 100, (i + 1) * 100 - 40, GetColor(200, 200, 0), true);
 			}
