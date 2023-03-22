@@ -34,11 +34,40 @@ void Field::Initialize()
 			map[i][j] = tempMap[i][j];
 		}
 	}
+
+	for (int i = ANDO_MAP_CONST - 1; i >= 0; i--) {
+		for (int j = 0; j < gridY; j++) {
+			for (int k = 0; k < gridY; k++) {
+				andoMap[i][j][k] = 0;
+				andoMapActive[i] = false;
+			}
+		}
+	}
 }
 
 void Field::Update()
 {
-
+	//右クリックで1手戻る
+	if ((GetMouseInput() & MOUSE_INPUT_RIGHT) != 0) {
+		if (isAndo == false) {
+			//1番新しい情報を探す
+			for (int i = ANDO_MAP_CONST - 1; i >= 0; i--) {
+				if (andoMapActive[i] == true) {
+					for (int j = 0; j < gridY; j++) {
+						for (int k = 0; k < gridX; k++) {
+							map[j][k] = andoMap[i][j][k];
+							andoMapActive[i] = false;
+						}
+					}
+					break;
+				}
+			}
+			isAndo = true;
+		}
+	}
+	else {
+		isAndo = false;
+	}
 }
 
 void Field::Draw()
@@ -110,11 +139,9 @@ void Field::Draw()
 					//発電機
 					if (count >= map[i][j]) {
 						DrawCircle(j * gridLength + gridLength / 2, i * gridLength + gridLength / 2, gridLength / 2, GetColor(200, 200, 0));
-						DrawFormatString(j * gridLength + 40, i * gridLength + 40, GetColor(255, 255, 255), "%d", map[i][j]);
 					}
 					else if (count < map[i][j]) {
 						DrawCircle(j * gridLength + gridLength / 2, i * gridLength + gridLength / 2, gridLength / 2, GetColor(0, 0, 200));
-						DrawFormatString(j * gridLength + 40, i * gridLength + 40, GetColor(255, 255, 255), "%d", map[i][j]);
 					}
 				}
 				//動かせない発電機
@@ -122,11 +149,9 @@ void Field::Draw()
 					//発電機
 					if (count >= map[i][j] - 10) {
 						DrawBox(j * gridLength, i * gridLength, (j + 1) * gridLength, (i + 1) * gridLength, GetColor(200, 200, 0), true);
-						DrawFormatString(j * gridLength + 40, i * gridLength + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
 					}
 					else if (count < map[i][j] - 10) {
 						DrawBox(j * gridLength, i * gridLength, (j + 1) * gridLength, (i + 1) * gridLength, GetColor(0, 0, 200), true);
-						DrawFormatString(j * gridLength + 40, i * gridLength + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
 					}
 				}
 				else {
