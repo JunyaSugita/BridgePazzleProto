@@ -16,19 +16,19 @@ Vector2 PlayerState::CalculateEndPos(Vector2 startPos, int moveLength)
 	{
 		endPos = { startPos.x - moveLength,startPos.y };
 	}
-	else if (player->GetMoveKey() == UP)
+	if (player->GetMoveKey() == UP)
 	{
 		endPos = { startPos.x,startPos.y - moveLength };
 	}
-	else if (player->GetMoveKey() == RIGHT)
+	if (player->GetMoveKey() == RIGHT)
 	{
 		endPos = { startPos.x + moveLength,startPos.y };
 	}
-	else if (player->GetMoveKey() == DOWN)
+	if (player->GetMoveKey() == DOWN)
 	{
 		endPos = { startPos.x ,startPos.y + moveLength };
 	}
-	else
+	else if (player->GetMoveKey() == NONE)
 	{
 		endPos = startPos;
 	}
@@ -101,14 +101,14 @@ void Player::SetPosGrid(int y, int x)
 	};
 }
 
-int Player::GetPosGridX()
+int Player::GetPosGridX(int addPos)
 {
-	return pos.x / Field::gridLength;
+	return (int)pos.x / Field::gridLength + addPos;
 }
 
-int Player::GetPosGridY()
+int Player::GetPosGridY(int addPos)
 {
-	return pos.y / Field::gridLength;
+	return (int)pos.y / Field::gridLength + addPos;
 }
 
 void Player::MoveEndFunc()
@@ -132,57 +132,31 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	if (KeyboardInput::Getinstance().GetKeyTrigger(KEY_INPUT_LEFT) ||
-		KeyboardInput::Getinstance().GetKeyTrigger(KEY_INPUT_UP) ||
-		KeyboardInput::Getinstance().GetKeyTrigger(KEY_INPUT_RIGHT) ||
-		KeyboardInput::Getinstance().GetKeyTrigger(KEY_INPUT_DOWN))
-	{
-		if (KeyboardInput::Getinstance().GetKeyTrigger(KEY_INPUT_LEFT))
-		{
-			isMoving = true;
-			moveKey = (LEFT);
-		}
-		if (KeyboardInput::Getinstance().GetKeyTrigger(KEY_INPUT_UP))
-		{
-			isMoving = true;
-			moveKey = (UP);
-		}
-		if (KeyboardInput::Getinstance().GetKeyTrigger(KEY_INPUT_RIGHT))
-		{
-			isMoving = true;
-			moveKey = (RIGHT);
-		}
-		if (KeyboardInput::Getinstance().GetKeyTrigger(KEY_INPUT_DOWN))
-		{
-			isMoving = true;
-			moveKey = (DOWN);
-		}
-
-		state->CalculateEndPos(pos, moveLength);
-	}
-	else if (
-		KeyboardInput::Getinstance().GetKey(KEY_INPUT_LEFT) ||
+	//ちゃんとならない（移動中にキー押すと）
+	if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_LEFT) ||
 		KeyboardInput::Getinstance().GetKey(KEY_INPUT_UP) ||
 		KeyboardInput::Getinstance().GetKey(KEY_INPUT_RIGHT) ||
-		KeyboardInput::Getinstance().GetKey(KEY_INPUT_DOWN)
-		)
+		KeyboardInput::Getinstance().GetKey(KEY_INPUT_DOWN))
 	{
-		if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_LEFT))
+		int x = GetPosGridX();
+		int y = GetPosGridY();
+
+		if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_LEFT) && Field::CanMoveGrid(y, x - 1, LEFT))
 		{
 			isMoving = true;
 			moveKey = (LEFT);
 		}
-		if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_UP))
+		if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_UP) && Field::CanMoveGrid(y - 1, x, UP))
 		{
 			isMoving = true;
 			moveKey = (UP);
 		}
-		if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_RIGHT))
+		if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_RIGHT) && Field::CanMoveGrid(y, x + 1, RIGHT))
 		{
 			isMoving = true;
 			moveKey = (RIGHT);
 		}
-		if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_DOWN))
+		if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_DOWN) && Field::CanMoveGrid(y + 1, x, DOWN))
 		{
 			isMoving = true;
 			moveKey = (DOWN);
@@ -192,6 +166,8 @@ void Player::Update()
 	{
 		moveKey = NONE;
 	}
+
+
 
 	//ステート
 	state->Update();

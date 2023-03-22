@@ -2,18 +2,6 @@
 #include"Util.h"
 #include"Field.h"
 
-
-
-//進む方向用
-enum MoveDirection
-{
-	NONE,//進まない
-	LEFT,//左
-	UP,//上
-	RIGHT,//右
-	DOWN,//下
-};
-
 class Player;
 
 //ステート親クラス
@@ -107,8 +95,9 @@ public:
 	Vector2 GetPos() { return pos; }
 	//グリッドで見たときの位置
 	void SetPosGrid(int y, int x);
-	int GetPosGridX();
-	int GetPosGridY();
+	//addposは、一個右とか指定出来る用
+	int GetPosGridX(int addPos = 0);
+	int GetPosGridY(int addPos = 0);
 	//動いてるかフラグ
 	void SetIsMoving(bool is) { this->isMoving = is; }
 	bool GetIsMoving() { return isMoving; }
