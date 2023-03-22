@@ -3,6 +3,7 @@
 #include "Generator.h"
 #include "GrovalSetting.h"
 #include "Player.h"
+#include "KeyboardInput.h"
 
 // ウィンドウのタイトルに表示する文字列
 const char TITLE[] = "BridgePazzleProto";
@@ -51,23 +52,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	Player::GetInstance().Initialize();
 
-	// 最新のキーボード情報用
-	char keys[256] = {0};
-
-	// 1ループ(フレーム)前のキーボード情報
-	char oldkeys[256] = {0};
 
 	// ゲームループ
 	while (true) {
-		// 最新のキーボード情報だったものは1フレーム前のキーボード情報として保存
-		for (int i = 0; i < 256; ++i)
-		{
-			oldkeys[i] = keys[i];
-		}
-		//配列なのでoldkey - keys;のようにできない。要素を１つずつコピー
-	
-		// 最新のキーボード情報を取得
-		GetHitKeyStateAll(keys);
+		//キー
+		KeyboardInput::Getinstance().Update();
 
 		// 画面クリア
 		ClearDrawScreen();

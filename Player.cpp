@@ -1,5 +1,7 @@
 #include "Player.h"
 #include "DxLib.h"
+#include "KeyboardInput.h"
+
 
 void PlayerState::SetPlayer(Player* player)
 {
@@ -130,24 +132,57 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	if (CheckHitKey(KEY_INPUT_LEFT) || CheckHitKey(KEY_INPUT_UP) || CheckHitKey(KEY_INPUT_RIGHT) || CheckHitKey(KEY_INPUT_DOWN))
+	if (KeyboardInput::Getinstance().GetKeyTrigger(KEY_INPUT_LEFT) ||
+		KeyboardInput::Getinstance().GetKeyTrigger(KEY_INPUT_UP) ||
+		KeyboardInput::Getinstance().GetKeyTrigger(KEY_INPUT_RIGHT) ||
+		KeyboardInput::Getinstance().GetKeyTrigger(KEY_INPUT_DOWN))
 	{
-		if (CheckHitKey(KEY_INPUT_LEFT))
+		if (KeyboardInput::Getinstance().GetKeyTrigger(KEY_INPUT_LEFT))
 		{
 			isMoving = true;
 			moveKey = (LEFT);
 		}
-		if (CheckHitKey(KEY_INPUT_UP))
+		if (KeyboardInput::Getinstance().GetKeyTrigger(KEY_INPUT_UP))
 		{
 			isMoving = true;
 			moveKey = (UP);
 		}
-		if (CheckHitKey(KEY_INPUT_RIGHT))
+		if (KeyboardInput::Getinstance().GetKeyTrigger(KEY_INPUT_RIGHT))
 		{
 			isMoving = true;
 			moveKey = (RIGHT);
 		}
-		if (CheckHitKey(KEY_INPUT_DOWN))
+		if (KeyboardInput::Getinstance().GetKeyTrigger(KEY_INPUT_DOWN))
+		{
+			isMoving = true;
+			moveKey = (DOWN);
+		}
+
+		state->CalculateEndPos(pos, moveLength);
+	}
+	else if (
+		KeyboardInput::Getinstance().GetKey(KEY_INPUT_LEFT) ||
+		KeyboardInput::Getinstance().GetKey(KEY_INPUT_UP) ||
+		KeyboardInput::Getinstance().GetKey(KEY_INPUT_RIGHT) ||
+		KeyboardInput::Getinstance().GetKey(KEY_INPUT_DOWN)
+		)
+	{
+		if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_LEFT))
+		{
+			isMoving = true;
+			moveKey = (LEFT);
+		}
+		if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_UP))
+		{
+			isMoving = true;
+			moveKey = (UP);
+		}
+		if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_RIGHT))
+		{
+			isMoving = true;
+			moveKey = (RIGHT);
+		}
+		if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_DOWN))
 		{
 			isMoving = true;
 			moveKey = (DOWN);
@@ -164,7 +199,7 @@ void Player::Update()
 
 void Player::Draw()
 {
-	DrawCircle(pos.x , pos.y , Field::gridLength / 2, GetColor(255, 255, 255));
+	DrawCircle(pos.x, pos.y, Field::gridLength / 2, GetColor(255, 255, 255));
 
 	//ステート
 	state->Draw();

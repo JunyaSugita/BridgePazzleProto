@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="Generator.cpp" />
+    <ClCompile Include="KeyboardInput.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Util.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="Field.h" />
     <ClInclude Include="Generator.h" />
     <ClInclude Include="GrovalSetting.h" />
+    <ClInclude Include="KeyboardInput.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="Vector2.h" />
