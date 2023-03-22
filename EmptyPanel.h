@@ -1,7 +1,6 @@
 #pragma once
 #include "DxLib.h"
 #include "GrovalSetting.h"
-#include "Vector2.h"
 
 //‹ó‚Ìƒpƒlƒ‹
 class EmptyPanel

@@ -11,7 +11,7 @@ public:
 public:
 	void Initialize();
 	void Update();
-	void Draw();
+	void Draw(int wide, int height);
 
 	/// <summary>
 	/// 指定座標のマップチップ番号の取得
@@ -29,8 +29,19 @@ public:
 	/// <param name="num">セットしたいマップチップ番号</param>
 	void SetMapNum(int x, int y, int num);
 
+	/// <summary>
+	/// フィールドの座標をセットする
+	/// </summary>
+	void SetPos(int x, int y);
+
 public:
 	int map[gridY][gridX];
 	bool shortMap[gridY][gridX];
+
+	//グリッドの長さ
+	static const int gridLength = 100;
+
+	//枠内での座標
+	Vector2 pos;
 };
 

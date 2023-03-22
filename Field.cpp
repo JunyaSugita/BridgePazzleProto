@@ -41,7 +41,8 @@ void Field::Update()
 
 }
 
-void Field::Draw()
+void Field::Draw(int height, int wide)
+//void Field::Draw()
 {
 	for (int i = 0; i < gridY; i++) {
 		for (int j = 0; j < gridX; j++) {
@@ -50,19 +51,19 @@ void Field::Draw()
 	}
 
 	//縦軸グリッド
-	for (int i = 1; i < gridY; i++) {
-		DrawLine(60 * i, 0, 60 * i, 60 * gridY, GetColor(255, 255, 255));
+	for (int i = 0; i < gridY; i++) {
+		DrawLine(60 * i + (wide * 300), 0, 60 * i + (wide * 300), 60 * gridY + (height * 300), GetColor(255, 255, 255));
 	}
 	//横軸グリッド
-	for (int i = 1; i < gridX; i++) {
-		DrawLine(0, 60 * i, 60 * gridX, 60 * i, GetColor(255, 255, 255));
+	for (int i = 0; i < gridX; i++) {
+		DrawLine(0, 60 * i + (height * 300), 60 * gridX + (wide * 300), 60 * i + (height * 300), GetColor(255, 255, 255));
 	}
 
 	for (int i = 0; i < gridY; i++) {
 		for (int j = 0; j < gridX; j++) {
 			//壁
 			if (map[i][j] == -1) {
-				DrawBox(j * 60, i * 60, (j + 1) * 60, (i + 1) * 60, GetColor(255, 255, 255), true);
+				DrawBox(j * 60 + (height * 300), i * 60 + (wide * 300), (j + 1) * 60 + (height * 300), (i + 1) * 60 + (wide * 300), GetColor(255, 255, 255), true);
 			}
 			else if (map[i][j] > 0 && map[i][j] < 20) {
 
@@ -128,42 +129,42 @@ void Field::Draw()
 				if (map[i][j] < 10) {
 					//発電機
 					if (count == map[i][j]) {
-						DrawCircle(j * 60 + 30, i * 60 + 30, 30, GetColor(200, 200, 0));
-						DrawFormatString(j * 60 + 40, i * 60 + 40, GetColor(255, 255, 255), "%d", map[i][j]);
+						DrawCircle(j * 60 + 30 + (height * 300), i * 60 + 30 + (wide * 300), 30, GetColor(200, 200, 0));
+						DrawFormatString(j * 60 + 40 + (height * 300), i * 60 + 40 + (wide * 300), GetColor(255, 255, 255), "%d", map[i][j]);
 					}
 					else if (count > map[i][j]) {
-						DrawCircle(j * 60 + 30, i * 60 + 30, 30, GetColor(200, 0, 0));
-						DrawFormatString(j * 60 + 40, i * 60 + 40, GetColor(255, 255, 255), "%d", map[i][j]);
+						DrawCircle(j * 60 + 30 + (height * 300), i * 60 + 30 + (wide * 300), 30, GetColor(200, 0, 0));
+						DrawFormatString(j * 60 + 40 + (height * 300), i * 60 + 40 + (wide * 300), GetColor(255, 255, 255), "%d", map[i][j]);
 						shortMap[i][j] = true;
 					}
 					else if (count < map[i][j]) {
-						DrawCircle(j * 60 + 30, i * 60 + 30, 30, GetColor(0, 0, 200));
-						DrawFormatString(j * 60 + 40, i * 60 + 40, GetColor(255, 255, 255), "%d", map[i][j]);
+						DrawCircle(j * 60 + 30 + (height * 300), i * 60 + 30 + (wide * 300), 30, GetColor(0, 0, 200));
+						DrawFormatString(j * 60 + 40 + (height * 300), i * 60 + 40 + (wide * 300), GetColor(255, 255, 255), "%d", map[i][j]);
 					}
 				}
 				//動かせない発電機
 				else if (map[i][j] < 20) {
 					//発電機
 					if (count == map[i][j] - 10) {
-						DrawBox(j * 60, i * 60, (j + 1) * 60, (i + 1) * 60, GetColor(200, 200, 0), true);
+						DrawBox(j * 60 + (height * 300), i * 60 + (wide * 300), (j + 1) * 60 + (height * 300), (i + 1) * 60 + (wide * 300), GetColor(200, 200, 0), true);
 						DrawFormatString(j * 60 + 40, i * 60 + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
 					}
 					else if (count > map[i][j] - 10) {
-						DrawBox(j * 60, i * 60, (j + 1) * 60, (i + 1) * 60, GetColor(200, 0, 0), true);
+						DrawBox(j * 60 + (height * 300), i * 60 + (wide * 300), (j + 1) * 60 + (height * 300), (i + 1) * 60 + (wide * 300), GetColor(200, 0, 0), true);
 						DrawFormatString(j * 60 + 40, i * 60 + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
 						shortMap[i][j] = true;
 					}
 					else if (count < map[i][j] - 10) {
-						DrawBox(j * 60, i * 60, (j + 1) * 60, (i + 1) * 60, GetColor(0, 0, 200), true);
-						DrawFormatString(j * 60 + 40, i * 60 + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
+						DrawBox(j * 60 + (height * 300), i * 60 + (wide * 300), (j + 1) * 60 + (height * 300), (i + 1) * 60 + (wide * 300), GetColor(0, 0, 200), true);
+						DrawFormatString(j * 60 + 40 + (height * 300), i * 60 + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
 					}
 				}
 			}
 			else if (map[i][j] == 20) {
-				DrawBox(j * 60 + 40, i * 60, (j + 1) * 60 - 40, (i + 1) * 60, GetColor(200, 200, 0), true);
+				DrawBox(j * 60 + 40 + (height * 300), i * 60 + (wide * 300), (j + 1) * 60 - 40 + (height * 300), (i + 1) * 60 + (wide * 300), GetColor(200, 200, 0), true);
 			}
 			else if (map[i][j] == 21) {
-				DrawBox(j * 60, i * 60 + 40, (j + 1) * 60, (i + 1) * 60 - 40, GetColor(200, 200, 0), true);
+				DrawBox(j * 60 + (height * 300), i * 60 + 40 + (wide * 300), (j + 1) * 60 + (height * 300), (i + 1) * 60 - 40 + (wide * 300), GetColor(200, 200, 0), true);
 			}
 		}
 	}
@@ -178,4 +179,10 @@ int Field::GetMapNum(int x, int y)
 void Field::SetMapNum(int x, int y, int num)
 {
 	map[y][x] = num;
+}
+
+void Field::SetPos(int x, int y)
+{
+	pos.x = x * 300;
+	pos.y = y * 300;
 }

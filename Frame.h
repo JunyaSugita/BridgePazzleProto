@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 #include "Vector2.h"
+#include "GrovalSetting.h"
+#include "Generator.h"
 
 class Frame
 {
@@ -12,6 +14,12 @@ private:
 	int fieldFrameHeight = 3;
 	//大枠の総数
 	int fieldFrameNum = fieldFrameWidth * fieldFrameHeight;
+
+	//枠の横の最大数
+	static const int MaxFrameX = 3;
+	//枠の縦の最大数
+	static const int MaxFrameY = 3;
+
 
 	/*static const int layerFrameWidth = 3;
 	static const int layerFrameHeight = 3;
@@ -24,15 +32,11 @@ public:
 	//初期化
 	void Initialize();
 	//更新
-	void Update(char* keys, char* oldkeys, int mouseX, int mouseY, int oldMouseX, int oldMouseY);
+	void Update();
 	//描画
 	void Draw();
 
 	//フィールドの中身をセットする関数
-	
-	//
-
-	
 
 public:
 
@@ -42,7 +46,18 @@ public:
 private:
 
 	//フレームの中のフィールドの配列
-	std::vector<std::vector<std::unique_ptr <Field>>> field_;
+	std::vector<std::vector<std::unique_ptr <Field>>> fields_;
+	std::vector<std::unique_ptr <Field>> fieldInTheFrame[MaxFrameY][MaxFrameX] = {};
+
+	std::vector<std::vector<std::unique_ptr <Generator>>> generators_;
+	//std::vector<std::unique_ptr <Generator>> fieldInTheFrame[MaxFrameY][MaxFrameX] = {};
+
+
+	Generator* generator_;
+
+	int mouseX, mouseY;
+	int mouseMapPointX, mouseMapPointY;
+
 
 public: //ゲッター
 

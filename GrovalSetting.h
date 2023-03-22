@@ -1,9 +1,5 @@
 #pragma once
-
-//˜g‚Ì‰¡²‚Ì’·‚³
-static const int frameX = 3;
-//˜g‚Ìc²‚Ì’·‚³
-static const int frameY = 3;
+#include"Vector2.h"
 
 //‰¡²‚Ìƒ}ƒX”(Å‘å19‚Ü‚ÅI)
 static const int gridX = 5;

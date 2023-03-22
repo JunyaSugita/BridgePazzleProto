@@ -2,6 +2,7 @@
 #include "Field.h"
 #include "Generator.h"
 #include "GrovalSetting.h"
+#include "Frame.h"
 
 // ウィンドウのタイトルに表示する文字列
 const char TITLE[] = "BridgePazzleProto";
@@ -45,10 +46,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SetFontSize(32);
 
 	// ゲームループで使う変数の宣言
-	Field* field = new Field();
-	field->Initialize();
-	Generator* generator = new Generator();
-	generator->Initialize(field);
+	/*Field* field = new Field();
+	field->Initialize();*/
+	//Generator* generator = new Generator();
+	//generator->Initialize(field);
+
+	Frame* frame = new Frame();
+	frame->Initialize();
 
 	// 最新のキーボード情報用
 	char keys[256] = {0};
@@ -73,12 +77,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		//---------  ここからプログラムを記述  ----------//
 
 		// 更新処理
-		field->Update();
-		generator->Update(field);
+		frame->Update();
+		//field->Update();
+		//generator->Update(field);
 
 		// 描画処理
-		field->Draw();
-		generator->Draw();
+		//field->Draw();
+		frame->Draw();
+		//generator->Draw();
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
@@ -98,8 +104,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 	}
 	//delete処理
-	delete field;
-	delete generator;
+	//delete field;
+	//delete generator;
+	delete frame;
 
 	// Dxライブラリ終了処理
 	DxLib_End();
