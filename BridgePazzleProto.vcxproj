@@ -128,18 +128,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Field.cpp" />
+    <ClCompile Include="Frame.cpp" />
     <ClCompile Include="Generator.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Panel.cpp" />
+    <ClCompile Include="EmptyPanel.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Field.h" />
+    <ClInclude Include="Frame.h" />
     <ClInclude Include="Generator.h" />
     <ClInclude Include="GrovalSetting.h" />
-    <ClInclude Include="Panel.h" />
+    <ClInclude Include="EmptyPanel.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="Vector2.h" />

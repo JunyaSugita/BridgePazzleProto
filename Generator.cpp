@@ -81,8 +81,8 @@ void Generator::Update(Field* field)
 	//マウス情報取得
 	GetMousePoint(&mouseX, &mouseY);
 	//マウス情報をマップチップ座標化
-	mouseMapPointX = mouseX / 100;
-	mouseMapPointY = mouseY / 100;
+	mouseMapPointX = mouseX / 60;
+	mouseMapPointY = mouseY / 60;
 
 	//ショートしている場所の線を消す
 	for (int i = 0; i < gridY; i++) {
@@ -365,7 +365,7 @@ void Generator::Update(Field* field)
 void Generator::Draw()
 {
 	if (have_ == true) {
-		DrawCircle(mouseX ,mouseY, 50, GetColor(255, 255, 255));
+		DrawCircle(mouseX ,mouseY, 30, GetColor(255, 255, 255));
 		DrawFormatString(mouseX, mouseY, GetColor(0, 0, 0), "%d", haveNum_);
 	}
 }
