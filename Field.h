@@ -32,5 +32,8 @@ public:
 public:
 	int map[gridY][gridX];
 	bool shortMap[gridY][gridX];
+
+	//ƒOƒŠƒbƒh‚Ì’·‚³
+	static const int gridLength = 100;
 };
 
