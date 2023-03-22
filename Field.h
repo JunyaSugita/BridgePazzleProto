@@ -9,8 +9,19 @@ public:
 	~Field();
 
 public:
+	/// <summary>
+	/// ‰Šú‰»
+	/// </summary>
 	void Initialize();
+
+	/// <summary>
+	/// XVˆ—
+	/// </summary>
 	void Update();
+
+	/// <summary>
+	/// •`‰æˆ—
+	/// </summary>
 	void Draw();
 
 	/// <summary>
@@ -31,6 +42,5 @@ public:
 
 public:
 	int map[gridY][gridX];
-	bool shortMap[gridY][gridX];
 };
 

@@ -84,51 +84,6 @@ void Generator::Update(Field* field)
 	mouseMapPointX = mouseX / 100;
 	mouseMapPointY = mouseY / 100;
 
-	//ショートしている場所の線を消す
-	for (int i = 0; i < gridY; i++) {
-		for (int j = 0; j < gridX; j++) {
-			if (field_->shortMap[i][j] == true) {
-				//繋がり検索
-				//上
-				for (int k = i - 1; k >= 0; k--) {
-					if (field_->GetMapNum(j, k) == 20) {
-						field_->SetMapNum(j, k, 0);
-					}
-					else {
-						break;
-					}
-				}
-				//下
-				for (int k = i + 1; k < gridY; k++) {
-					if (field_->GetMapNum(j, k) == 20) {
-						field_->SetMapNum(j, k, 0);
-					}
-					else {
-						break;
-					}
-				}
-				//左
-				for (int k = j - 1; k >= 0; k--) {
-					if (field_->GetMapNum(k, i) == 21) {
-						field_->SetMapNum(k, i, 0);
-					}
-					else {
-						break;
-					}
-				}
-				//下
-				for (int k = j + 1; k < gridY; k++) {
-					if (field_->GetMapNum(k, i) == 21) {
-						field_->SetMapNum(k, i, 0);
-					}
-					else {
-						break;
-					}
-				}
-			}
-		}
-	}
-
 	//クリックしている時
 	if ((GetMouseInput() & MOUSE_INPUT_LEFT) != 0) {
 		//クリックした瞬間
@@ -246,7 +201,10 @@ void Generator::Update(Field* field)
 			}
 		}
 	}
+	//クリックしていなくて持っているフラグがtrueの時
+	//(発電機を置くとき)
 	else if(have_ == true){
+		//発電機を置く場所が空白の場所では無い時
 		if (field_->GetMapNum(mouseMapPointX, mouseMapPointY) != 0) {
 			field_->SetMapNum(oldHavePosX_, oldHavePosY_, haveNum_);
 			haveNum_ = 0;
@@ -303,6 +261,7 @@ void Generator::Update(Field* field)
 				}
 			}
 		}
+		//発電機を置く場所が空白の時
 		else {
 			field_->SetMapNum(mouseMapPointX, mouseMapPointY, haveNum_);
 			haveNum_ = 0;
@@ -366,6 +325,5 @@ void Generator::Draw()
 {
 	if (have_ == true) {
 		DrawCircle(mouseX ,mouseY, 50, GetColor(255, 255, 255));
-		DrawFormatString(mouseX, mouseY, GetColor(0, 0, 0), "%d", haveNum_);
 	}
 }
