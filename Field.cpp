@@ -195,11 +195,6 @@ void Field::SetMapNum(int x, int y, int num)
 
 bool Field::PullBlock(int y, int x, int moveDirection)
 {
-	//if (!(y > 1 && y < gridY-1 && x > 1 && x < gridX-1))
-	//{
-	//	return false;
-	//}
-
 	//進む先が押せるブロックだったら
 	if (map[y][x] == 1)
 	{
@@ -254,15 +249,62 @@ bool Field::PullBlock(int y, int x, int moveDirection)
 	return false;
 }
 
+bool Field::GetPullBlock(int y, int x, int moveDirection)
+{
+	if (map[y][x] == 1)
+	{
+		int Y = 0;
+		int X = 0;
+
+		Y = y;
+		X = x - 1;
+		//一個左に何もなかったら
+		if (moveDirection == LEFT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21)
+			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
+		{
+			return true;
+		}
+
+		Y = y - 1;
+		X = x;
+		//一個上に何もなかったら
+		if (moveDirection == UP && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21)
+			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
+		{
+			return true;
+		}
+
+		Y = y;
+		X = x + 1;
+		//一個左に何もなかったら
+		if (moveDirection == RIGHT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21)
+			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
+		{
+			return true;
+		}
+
+		Y = y + 1;
+		X = x;
+		//一個左に何もなかったら
+		if (moveDirection == DOWN && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21)
+			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 bool Field::CanMoveGrid(int y, int x, int moveDirection)
 {
 	//ブロックがあっても押せたら
-	if (PullBlock(y, x, moveDirection))
+	if (GetPullBlock(y, x, moveDirection))
 	{
 		return true;
 	}
 	//押せなかったら
-	else if (map[y][x] != 1 && map[y][x] != 11 && map[y][x] != -1)
+	if (map[y][x] != 1 && map[y][x] != 11 && map[y][x] != -1)
 	{
 		return true;
 	}

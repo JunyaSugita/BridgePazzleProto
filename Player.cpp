@@ -10,30 +10,33 @@ void PlayerState::SetPlayer(Player* player)
 
 Vector2 PlayerState::CalculateEndPos(Vector2 startPos, int moveLength)
 {
-	Vector2 endPos = {};
+	int y = player->GetPosGridY();
+	int x = player->GetPosGridX();
 
 	if (player->GetMoveKey() == LEFT)
 	{
-		endPos = { startPos.x - moveLength,startPos.y };
+		Field::PullBlock(y, x - 1, LEFT);
+		return { startPos.x - moveLength,startPos.y };
 	}
 	if (player->GetMoveKey() == UP)
 	{
-		endPos = { startPos.x,startPos.y - moveLength };
+		Field::PullBlock(y - 1, x, UP);
+		return { startPos.x,startPos.y - moveLength };
 	}
 	if (player->GetMoveKey() == RIGHT)
 	{
-		endPos = { startPos.x + moveLength,startPos.y };
+		Field::PullBlock(y, x + 1, RIGHT);
+		return { startPos.x + moveLength,startPos.y };
 	}
 	if (player->GetMoveKey() == DOWN)
 	{
-		endPos = { startPos.x ,startPos.y + moveLength };
+		Field::PullBlock(y + 1, x, DOWN);
+		return { startPos.x ,startPos.y + moveLength };
 	}
-	else if (player->GetMoveKey() == NONE)
+	else /*if (player->GetMoveKey() == NONE)*/
 	{
-		endPos = startPos;
+		return startPos;
 	}
-
-	return Vector2(endPos);
 }
 
 //-------------------------------------

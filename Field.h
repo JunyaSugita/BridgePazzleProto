@@ -20,8 +20,7 @@ public:
 	~Field();
 
 private:
-	//playerがブロックとか押す用
-	static bool PullBlock(int y, int x, int moveDirection);
+
 
 public:
 	/// <summary>
@@ -57,6 +56,10 @@ public:
 
 	//進める場所か返す
 	static bool CanMoveGrid(int y, int x,int moveDirection);
+	//playerがブロックとか押す用
+	static bool PullBlock(int y, int x, int moveDirection);
+	//押せるかどうかだけ（移動したりはしない）
+	static bool GetPullBlock(int y, int x, int moveDirection);
 
 public:
 	//マップ
