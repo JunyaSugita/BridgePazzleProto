@@ -69,9 +69,6 @@ void Field::Draw()
 					if (map[i][k] == -1) {
 						break;
 					}
-					if (map[i][k] == 20) {
-						break;
-					}
 					else if (map[i][k] > 0 && map[i][k] < 20) {
 						count++;
 						break;
@@ -80,9 +77,6 @@ void Field::Draw()
 				//下へのつながり
 				for (int k = i + 1; k < gridY; k++) {
 					if (map[k][j] == -1) {
-						break;
-					}
-					if (map[k][j] == 21) {
 						break;
 					}
 					if (map[k][j] > 0 && map[k][j] < 20) {
@@ -96,9 +90,6 @@ void Field::Draw()
 					if (map[i][k] == -1) {
 						break;
 					}
-					if (map[i][k] == 20) {
-						break;
-					}
 					if (map[i][k] > 0 && map[i][k] < 20) {
 						count++;
 						break;
@@ -107,9 +98,6 @@ void Field::Draw()
 				//上へのつながり
 				for (int k = i - 1; k >= 0; k--) {
 					if (map[k][j] == -1) {
-						break;
-					}
-					if (map[k][j] == 21) {
 						break;
 					}
 					if (map[k][j] > 0 && map[k][j] < 20) {
@@ -123,11 +111,11 @@ void Field::Draw()
 					//発電機
 					if (count >= map[i][j]) {
 						DrawCircle(j * 100 + 50, i * 100 + 50, 50, GetColor(200, 200, 0));
-						DrawFormatString(j * 100 + 40, i * 100 + 40, GetColor(255, 255, 255), "%d", map[i][j]);
+						//DrawFormatString(j * 100 + 40, i * 100 + 40, GetColor(255, 255, 255), "%d", map[i][j]);
 					}
 					else if (count < map[i][j]) {
 						DrawCircle(j * 100 + 50, i * 100 + 50, 50, GetColor(0, 0, 200));
-						DrawFormatString(j * 100 + 40, i * 100 + 40, GetColor(255, 255, 255), "%d", map[i][j]);
+						//DrawFormatString(j * 100 + 40, i * 100 + 40, GetColor(255, 255, 255), "%d", map[i][j]);
 					}
 				}
 				//動かせない発電機
@@ -135,11 +123,11 @@ void Field::Draw()
 					//発電機
 					if (count >= map[i][j] - 10) {
 						DrawBox(j * 100, i * 100, (j + 1) * 100, (i + 1) * 100, GetColor(200, 200, 0), true);
-						DrawFormatString(j * 100 + 40, i * 100 + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
+						//DrawFormatString(j * 100 + 40, i * 100 + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
 					}
 					else if (count < map[i][j] - 10) {
 						DrawBox(j * 100, i * 100, (j + 1) * 100, (i + 1) * 100, GetColor(0, 0, 200), true);
-						DrawFormatString(j * 100 + 40, i * 100 + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
+						//DrawFormatString(j * 100 + 40, i * 100 + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
 					}
 				}
 			}
@@ -149,6 +137,11 @@ void Field::Draw()
 			}
 			//横の配線
 			else if (map[i][j] == 21) {
+				DrawBox(j * 100, i * 100 + 40, (j + 1) * 100, (i + 1) * 100 - 40, GetColor(200, 200, 0), true);
+			}
+			//十字の配線
+			else if (map[i][j] == 22) {
+				DrawBox(j * 100 + 40, i * 100, (j + 1) * 100 - 40, (i + 1) * 100, GetColor(200, 200, 0), true);
 				DrawBox(j * 100, i * 100 + 40, (j + 1) * 100, (i + 1) * 100 - 40, GetColor(200, 200, 0), true);
 			}
 		}
