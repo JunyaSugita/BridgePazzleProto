@@ -159,6 +159,9 @@ void Generator::Draw()
 	if (have_ == true) {
 		DrawCircle(mouseX, mouseY, 50, GetColor(255, 255, 255));
 	}
+	else {
+		DrawFormatString(100, 0, GetColor(255, 255, 255), "RIGHT_CLICK : ANDO");
+	}
 }
 
 void Generator::ConnectGenerator()
