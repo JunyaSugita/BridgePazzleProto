@@ -54,12 +54,11 @@ void Field::Draw()
 
 	for (int i = 0; i < gridY; i++) {
 		for (int j = 0; j < gridX; j++) {
-			if (map[i][j] != 0) {
-				//壁
-				if (map[i][j] == -1) {
-					DrawBox(j * gridLength, i * gridLength, (j + 1) * gridLength, (i + 1) * gridLength, GetColor(255, 255, 255), true);
-					continue;
-				}
+			//壁
+			if (map[i][j] == -1) {
+				DrawBox(j * gridLength, i * gridLength, (j + 1) * gridLength, (i + 1) * gridLength, GetColor(255, 255, 255), true);
+			}
+			else if (map[i][j] > 0 && map[i][j] < 20) {
 				///つながり
 				//つながりカウント
 				int count = 0;
@@ -109,14 +108,9 @@ void Field::Draw()
 				//動かせる発電機
 				if (map[i][j] < 10) {
 					//発電機
-					if (count == map[i][j]) {
+					if (count >= map[i][j]) {
 						DrawCircle(j * gridLength + gridLength / 2, i * gridLength + gridLength / 2, gridLength / 2, GetColor(200, 200, 0));
 						DrawFormatString(j * gridLength + 40, i * gridLength + 40, GetColor(255, 255, 255), "%d", map[i][j]);
-					}
-					else if (count > map[i][j]) {
-						DrawCircle(j * gridLength + gridLength / 2, i * gridLength + gridLength / 2, gridLength / 2, GetColor(200, 0, 0));
-						DrawFormatString(j * gridLength + 40, i * gridLength + 40, GetColor(255, 255, 255), "%d", map[i][j]);
-						shortMap[i][j] = true;
 					}
 					else if (count < map[i][j]) {
 						DrawCircle(j * gridLength + gridLength / 2, i * gridLength + gridLength / 2, gridLength / 2, GetColor(0, 0, 200));
@@ -126,14 +120,9 @@ void Field::Draw()
 				//動かせない発電機
 				else if (map[i][j] < 20) {
 					//発電機
-					if (count == map[i][j] - 10) {
+					if (count >= map[i][j] - 10) {
 						DrawBox(j * gridLength, i * gridLength, (j + 1) * gridLength, (i + 1) * gridLength, GetColor(200, 200, 0), true);
 						DrawFormatString(j * gridLength + 40, i * gridLength + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
-					}
-					else if (count > map[i][j] - 10) {
-						DrawBox(j * gridLength, i * gridLength, (j + 1) * gridLength, (i + 1) * gridLength, GetColor(200, 0, 0), true);
-						DrawFormatString(j * gridLength + 40, i * gridLength + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
-						shortMap[i][j] = true;
 					}
 					else if (count < map[i][j] - 10) {
 						DrawBox(j * gridLength, i * gridLength, (j + 1) * gridLength, (i + 1) * gridLength, GetColor(0, 0, 200), true);
@@ -151,16 +140,16 @@ void Field::Draw()
 			}
 			//縦の配線
 			else if (map[i][j] == 20) {
-				DrawBox(j * 100 + 40, i * 100, (j + 1) * 100 - 40, (i + 1) * 100, GetColor(200, 200, 0), true);
+				DrawBox(j * gridLength + 40, i * gridLength, (j + 1) * gridLength - 40, (i + 1) * gridLength, GetColor(200, 200, 0), true);
 			}
 			//横の配線
 			else if (map[i][j] == 21) {
-				DrawBox(j * 100, i * 100 + 40, (j + 1) * 100, (i + 1) * 100 - 40, GetColor(200, 200, 0), true);
+				DrawBox(j * gridLength, i * gridLength + 40, (j + 1) * gridLength, (i + 1) * gridLength - 40, GetColor(200, 200, 0), true);
 			}
 			//十字の配線
 			else if (map[i][j] == 22) {
-				DrawBox(j * 100 + 40, i * 100, (j + 1) * 100 - 40, (i + 1) * 100, GetColor(200, 200, 0), true);
-				DrawBox(j * 100, i * 100 + 40, (j + 1) * 100, (i + 1) * 100 - 40, GetColor(200, 200, 0), true);
+				DrawBox(j * gridLength + 40, i * gridLength, (j + 1) * gridLength - 40, (i + 1) * gridLength, GetColor(200, 200, 0), true);
+				DrawBox(j * gridLength, i * gridLength + 40, (j + 1) * gridLength, (i + 1) * gridLength - 40, GetColor(200, 200, 0), true);
 			}
 		}
 	}

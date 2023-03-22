@@ -43,7 +43,6 @@ public:
 public:
 	//マップ
 	int map[gridY][gridX];
-	bool shortMap[gridY][gridX];
 
 	//グリッドの長さ
 	static const int gridLength = 100;
