@@ -62,7 +62,13 @@ public:
 	//マップ
 	static int map[gridY][gridX];
 
+	//アンドゥ用
+	static const int ANDO_MAP_CONST = 50;
+	int andoMap[ANDO_MAP_CONST][gridY][gridX];
+	bool andoMapActive[ANDO_MAP_CONST];
+	bool isAndo;
+
 	//グリッドの長さ
-	static const int gridLength = 100;
+	static const int gridLength = 50;
 };
 
