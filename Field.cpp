@@ -10,15 +10,15 @@ Field::~Field()
 
 void Field::Initialize()
 {
-	//ƒ}ƒbƒv‚Ì¶¬(csv‘Î‰—\’è)
-	// -1 •Ç
-	// 00 ‹óŠÔ
-	// 1Œ…–Ú@0 = “®‚©‚¹‚é”­“d‹@(2Œ…–Ú1~9‚Ü‚Å)	
-	// 1Œ…–Ú@1 = “®‚©‚¹‚È‚¢”­“d‹@(2Œ…–Ú1~9‚Ü‚Å)
-	// 1Œ…–Ú@2 = ‰Šú‚Ì”zü(2Œ…–Ú 0 = c”zü@@1 = ‰¡”zü)
+	//ãƒãƒƒãƒ—ã®ç”Ÿæˆ(csvå¯¾å¿œäºˆå®š)
+	// -1 å£
+	// 00 ç©ºé–“
+	// 1æ¡ç›®ã€€0 = å‹•ã‹ã›ã‚‹ç™ºé›»æ©Ÿ(2æ¡ç›®1~9ã¾ã§)	
+	// 1æ¡ç›®ã€€1 = å‹•ã‹ã›ãªã„ç™ºé›»æ©Ÿ(2æ¡ç›®1~9ã¾ã§)
+	// 1æ¡ç›®ã€€2 = åˆæœŸã®é…ç·š(2æ¡ç›® 0 = ç¸¦é…ç·šã€€ã€€1 = æ¨ªé…ç·š)
 
-	// ‰Šú”zü‚Íİ’è‚µ‚È‚­‚Ä‚à—Ç‚¢‚ª‚»‚Ìê‡ "c" ‚ª—Dæ‚³‚ê‚é
-	// ‰Šú‚ÅƒNƒƒX‚µ‚Ä‚¢‚é”zü‚Íc‚ª—Dæ‚³‚ê‚é‚ªc•”•ª‚ªƒVƒ‡[ƒg‚µ‚Ä‚¢‚é‚ÆƒoƒO‚é
+	// åˆæœŸé…ç·šã¯è¨­å®šã—ãªãã¦ã‚‚è‰¯ã„ãŒãã®å ´åˆ "ç¸¦" ãŒå„ªå…ˆã•ã‚Œã‚‹
+	// åˆæœŸã§ã‚¯ãƒ­ã‚¹ã—ã¦ã„ã‚‹é…ç·šã¯ç¸¦ãŒå„ªå…ˆã•ã‚Œã‚‹ãŒç¸¦éƒ¨åˆ†ãŒã‚·ãƒ§ãƒ¼ãƒˆã—ã¦ã„ã‚‹ã¨ãƒã‚°ã‚‹
 
 	int tempMap[gridY][gridX] = {
 		{01,00,00,00,11},
@@ -28,7 +28,7 @@ void Field::Initialize()
 		{11,00,-1,00,01}
 	};
 
-	//ƒ}ƒbƒv‚Éî•ñ‚ğ“ü‚ê‚Ş
+	//ãƒãƒƒãƒ—ã«æƒ…å ±ã‚’å…¥ã‚Œè¾¼ã‚€
 	for (int i = 0; i < gridY; i++) {
 		for (int j = 0; j < gridX; j++) {
 			map[i][j] = tempMap[i][j];
@@ -43,28 +43,28 @@ void Field::Update()
 
 void Field::Draw()
 {
-	//c²ƒOƒŠƒbƒh
+	//ç¸¦è»¸ã‚°ãƒªãƒƒãƒ‰
 	for (int i = 1; i < gridY; i++) {
-		DrawLine(100 * i, 0, 100 * i, 100 * gridY, GetColor(255, 255, 255));
+		DrawLine(gridLength * i, 0, gridLength * i, gridLength * gridY, GetColor(255, 255, 255));
 	}
-	//‰¡²ƒOƒŠƒbƒh
+	//æ¨ªè»¸ã‚°ãƒªãƒƒãƒ‰
 	for (int i = 1; i < gridX; i++) {
-		DrawLine(0, 100 * i, 100 * gridX, 100 * i, GetColor(255, 255, 255));
+		DrawLine(0, gridLength * i, gridLength * gridX, gridLength * i, GetColor(255, 255, 255));
 	}
 
 	for (int i = 0; i < gridY; i++) {
 		for (int j = 0; j < gridX; j++) {
-			//•Ç
-			if (map[i][j] == -1) {
-				DrawBox(j * 100, i * 100, (j + 1) * 100, (i + 1) * 100, GetColor(255, 255, 255), true);
-			}
-			else if (map[i][j] > 0 && map[i][j] < 20) {
-
-				///‚Â‚È‚ª‚è
-				//‚Â‚È‚ª‚èƒJƒEƒ“ƒg
+			if (map[i][j] != 0) {
+				//å£
+				if (map[i][j] == -1) {
+					DrawBox(j * gridLength, i * gridLength, (j + 1) * gridLength, (i + 1) * gridLength, GetColor(255, 255, 255), true);
+					continue;
+				}
+				///ã¤ãªãŒã‚Š
+				//ã¤ãªãŒã‚Šã‚«ã‚¦ãƒ³ãƒˆ
 				int count = 0;
 
-				//‰E‚Ö‚Ì‚Â‚È‚ª‚è
+				//å³ã¸ã®ã¤ãªãŒã‚Š
 				for (int k = j + 1; k < gridX; k++) {
 					if (map[i][k] == -1) {
 						break;
@@ -74,7 +74,7 @@ void Field::Draw()
 						break;
 					}
 				}
-				//‰º‚Ö‚Ì‚Â‚È‚ª‚è
+				//ä¸‹ã¸ã®ã¤ãªãŒã‚Š
 				for (int k = i + 1; k < gridY; k++) {
 					if (map[k][j] == -1) {
 						break;
@@ -85,7 +85,7 @@ void Field::Draw()
 					}
 				}
 
-				//¶‚Ö‚Ì‚Â‚È‚ª‚è
+				//å·¦ã¸ã®ã¤ãªãŒã‚Šã¨é…ç·š
 				for (int k = j - 1; k >= 0; k--) {
 					if (map[i][k] == -1) {
 						break;
@@ -95,7 +95,7 @@ void Field::Draw()
 						break;
 					}
 				}
-				//ã‚Ö‚Ì‚Â‚È‚ª‚è
+				//ä¸Šã¸ã®ã¤ãªãŒã‚Š
 				for (int k = i - 1; k >= 0; k--) {
 					if (map[k][j] == -1) {
 						break;
@@ -106,36 +106,58 @@ void Field::Draw()
 					}
 				}
 
-				//“®‚©‚¹‚é”­“d‹@
+				//å‹•ã‹ã›ã‚‹ç™ºé›»æ©Ÿ
 				if (map[i][j] < 10) {
-					//”­“d‹@
-					if (count >= map[i][j]) {
-						DrawCircle(j * 100 + 50, i * 100 + 50, 50, GetColor(200, 200, 0));
+					//ç™ºé›»æ©Ÿ
+					if (count == map[i][j]) {
+						DrawCircle(j * gridLength + gridLength / 2, i * gridLength + gridLength / 2, gridLength / 2, GetColor(200, 200, 0));
+						DrawFormatString(j * gridLength + 40, i * gridLength + 40, GetColor(255, 255, 255), "%d", map[i][j]);
+					}
+					else if (count > map[i][j]) {
+						DrawCircle(j * gridLength + gridLength / 2, i * gridLength + gridLength / 2, gridLength / 2, GetColor(200, 0, 0));
+						DrawFormatString(j * gridLength + 40, i * gridLength + 40, GetColor(255, 255, 255), "%d", map[i][j]);
+						shortMap[i][j] = true;
 					}
 					else if (count < map[i][j]) {
-						DrawCircle(j * 100 + 50, i * 100 + 50, 50, GetColor(0, 0, 200));
+						DrawCircle(j * gridLength + gridLength / 2, i * gridLength + gridLength / 2, gridLength / 2, GetColor(0, 0, 200));
+						DrawFormatString(j * gridLength + 40, i * gridLength + 40, GetColor(255, 255, 255), "%d", map[i][j]);
 					}
 				}
-				//“®‚©‚¹‚È‚¢”­“d‹@
+				//å‹•ã‹ã›ãªã„ç™ºé›»æ©Ÿ
 				else if (map[i][j] < 20) {
-					//”­“d‹@
-					if (count >= map[i][j] - 10) {
-						DrawBox(j * 100, i * 100, (j + 1) * 100, (i + 1) * 100, GetColor(200, 200, 0), true);
+					//ç™ºé›»æ©Ÿ
+					if (count == map[i][j] - 10) {
+						DrawBox(j * gridLength, i * gridLength, (j + 1) * gridLength, (i + 1) * gridLength, GetColor(200, 200, 0), true);
+						DrawFormatString(j * gridLength + 40, i * gridLength + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
+					}
+					else if (count > map[i][j] - 10) {
+						DrawBox(j * gridLength, i * gridLength, (j + 1) * gridLength, (i + 1) * gridLength, GetColor(200, 0, 0), true);
+						DrawFormatString(j * gridLength + 40, i * gridLength + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
+						shortMap[i][j] = true;
 					}
 					else if (count < map[i][j] - 10) {
-						DrawBox(j * 100, i * 100, (j + 1) * 100, (i + 1) * 100, GetColor(0, 0, 200), true);
+						DrawBox(j * gridLength, i * gridLength, (j + 1) * gridLength, (i + 1) * gridLength, GetColor(0, 0, 200), true);
+						DrawFormatString(j * gridLength + 40, i * gridLength + 40, GetColor(255, 255, 255), "%d", map[i][j] - 10);
+					}
+				}
+				else {
+					if (map[i][j] == 20) {
+						DrawBox(j * gridLength + 40, i * gridLength, (j + 1) * gridLength - 40, (i + 1) * gridLength, GetColor(200, 200, 0), true);
+					}
+					else if (map[i][j] == 21) {
+						DrawBox(j * gridLength, i * gridLength + 40, (j + 1) * gridLength, (i + 1) * gridLength - 40, GetColor(200, 200, 0), true);
 					}
 				}
 			}
-			//c‚Ì”zü
+			//ç¸¦ã®é…ç·š
 			else if (map[i][j] == 20) {
 				DrawBox(j * 100 + 40, i * 100, (j + 1) * 100 - 40, (i + 1) * 100, GetColor(200, 200, 0), true);
 			}
-			//‰¡‚Ì”zü
+			//æ¨ªã®é…ç·š
 			else if (map[i][j] == 21) {
 				DrawBox(j * 100, i * 100 + 40, (j + 1) * 100, (i + 1) * 100 - 40, GetColor(200, 200, 0), true);
 			}
-			//\š‚Ì”zü
+			//åå­—ã®é…ç·š
 			else if (map[i][j] == 22) {
 				DrawBox(j * 100 + 40, i * 100, (j + 1) * 100 - 40, (i + 1) * 100, GetColor(200, 200, 0), true);
 				DrawBox(j * 100, i * 100 + 40, (j + 1) * 100, (i + 1) * 100 - 40, GetColor(200, 200, 0), true);

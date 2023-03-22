@@ -2,6 +2,7 @@
 #include "Field.h"
 #include "Generator.h"
 #include "GrovalSetting.h"
+#include "Player.h"
 
 // ウィンドウのタイトルに表示する文字列
 const char TITLE[] = "BridgePazzleProto";
@@ -48,6 +49,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Generator* generator = new Generator();
 	generator->Initialize(field);
 
+	Player::GetInstance().Initialize();
+
 	// 最新のキーボード情報用
 	char keys[256] = {0};
 
@@ -71,12 +74,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		//---------  ここからプログラムを記述  ----------//
 
 		// 更新処理
+		Player::GetInstance().Update();
 		field->Update();
 		generator->Update(field);
 
 		// 描画処理
 		field->Draw();
 		generator->Draw();
+		Player::GetInstance().Draw();
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面

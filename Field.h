@@ -10,38 +10,42 @@ public:
 
 public:
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize();
 
 	/// <summary>
-	/// XVˆ—
+	/// æ›´æ–°å‡¦ç†
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æˆ—
+	/// æç”»å‡¦ç†
 	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// w’èÀ•W‚Ìƒ}ƒbƒvƒ`ƒbƒv”Ô†‚Ìæ“¾
+	/// æŒ‡å®šåº§æ¨™ã®ãƒãƒƒãƒ—ãƒãƒƒãƒ—ç•ªå·ã®å–å¾—
 	/// </summary>
-	/// <param name="x">w’èÀ•W</param>
-	/// <param name="y">w’èÀ•W</param>
-	/// <returns>ƒ}ƒbƒvƒ`ƒbƒv”Ô†</returns>
+	/// <param name="x">æŒ‡å®šåº§æ¨™</param>
+	/// <param name="y">æŒ‡å®šåº§æ¨™</param>
+	/// <returns>ãƒãƒƒãƒ—ãƒãƒƒãƒ—ç•ªå·</returns>
 	int GetMapNum(int x, int y);
 
 	/// <summary>
-	/// w’èÀ•W‚Éƒ}ƒbƒvƒ`ƒbƒv”Ô†‚ğƒZƒbƒg
+	/// æŒ‡å®šåº§æ¨™ã«ãƒãƒƒãƒ—ãƒãƒƒãƒ—ç•ªå·ã‚’ã‚»ãƒƒãƒˆ
 	/// </summary>
-	/// <param name="x">w’èÀ•W</param>
-	/// <param name="y">w’èÀ•W</param>
-	/// <param name="num">ƒZƒbƒg‚µ‚½‚¢ƒ}ƒbƒvƒ`ƒbƒv”Ô†</param>
+	/// <param name="x">æŒ‡å®šåº§æ¨™</param>
+	/// <param name="y">æŒ‡å®šåº§æ¨™</param>
+	/// <param name="num">ã‚»ãƒƒãƒˆã—ãŸã„ãƒãƒƒãƒ—ãƒãƒƒãƒ—ç•ªå·</param>
 	void SetMapNum(int x, int y, int num);
 
 public:
-	//ƒ}ƒbƒv
+	//ãƒãƒƒãƒ—
 	int map[gridY][gridX];
+	bool shortMap[gridY][gridX];
+
+	//ã‚°ãƒªãƒƒãƒ‰ã®é•·ã•
+	static const int gridLength = 100;
 };
 
