@@ -41,6 +41,7 @@ public:
 	void SetMapNum(int x, int y, int num);
 
 public:
+	//ƒ}ƒbƒv
 	int map[gridY][gridX];
 };
 
