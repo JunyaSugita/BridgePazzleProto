@@ -30,6 +30,8 @@ public:
 	/// </summary>
 	void ConnectGenerator();
 
+	//離した発電機の配線を解除
+	void Disconnectgenerator();
 
 public:
 	//フィールドclassの情報
