@@ -25,6 +25,12 @@ public:
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// ”­“d‹@“¯Žm‚ðŒq‚°‚é
+	/// </summary>
+	void ConnectGenerator();
+
+
 public:
 	Field* field_;
 	int mouseX, mouseY;
