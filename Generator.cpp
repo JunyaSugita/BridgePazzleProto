@@ -2,6 +2,7 @@
 
 Generator::Generator()
 {
+	//test
 }
 
 Generator::~Generator()
