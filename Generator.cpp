@@ -40,9 +40,20 @@ void Generator::Update(Field* field)
 
 			//持っている数字を記録
 			haveNum_ = field_->GetMapNum(mouseMapPointX, mouseMapPointY);
-			
+
 			//動かせる物なら
 			if (haveNum_ > 0 && haveNum_ <= 9) {
+				for (int i = 0; i < field_->ANDO_MAP_CONST; i++) {
+					if (field_->andoMapActive[i] == false) {
+						for (int j = 0; j < gridY; j++) {
+							for (int k = 0; k < gridY; k++) {
+								field_->andoMap[i][j][k] = field_->map[j][k];
+								field_->andoMapActive[i] = true;
+							}
+						}
+						break;
+					}
+				}
 				//持っているフラグを立てる
 				have_ = true;
 				//マップ情報から持ち上げた情報を削除
@@ -53,7 +64,7 @@ void Generator::Update(Field* field)
 				for (int i = mouseMapPointY - 1; i >= 0; i--) {
 					//縦線を消す
 					if (field_->GetMapNum(mouseMapPointX, i) == 20) {
-						field_->SetMapNum(mouseMapPointX, i,0);
+						field_->SetMapNum(mouseMapPointX, i, 0);
 					}
 					//十字なら横線にする
 					else if (field_->GetMapNum(mouseMapPointX, i) == 22) {
@@ -114,9 +125,15 @@ void Generator::Update(Field* field)
 	}
 	//クリックしていなくて持っているフラグがtrueの時
 	//(発電機を置くとき)
-	else if(have_ == true){
+	else if (have_ == true) {
 		//発電機を置く場所が空白の場所では無い時
 		if (field_->GetMapNum(mouseMapPointX, mouseMapPointY) != 0) {
+			for (int i = field_->ANDO_MAP_CONST - 1; i >= 0; i--) {
+				if (field_->andoMapActive[i] == true) {
+					field_->andoMapActive[i] = false;
+					break;
+				}
+			}
 			//発電機を元の位置に戻す
 			field_->SetMapNum(oldHavePosX_, oldHavePosY_, haveNum_);
 			//何も持ってないことにする
@@ -126,6 +143,7 @@ void Generator::Update(Field* field)
 		}
 		//発電機を置く場所が空白の時
 		else {
+
 			//クリックをやめた場所に発電機を設置
 			field_->SetMapNum(mouseMapPointX, mouseMapPointY, haveNum_);
 			//何も持ってないことにする
@@ -139,7 +157,7 @@ void Generator::Update(Field* field)
 void Generator::Draw()
 {
 	if (have_ == true) {
-		DrawCircle(mouseX ,mouseY, 50, GetColor(255, 255, 255));
+		DrawCircle(mouseX, mouseY, 50, GetColor(255, 255, 255));
 	}
 }
 
