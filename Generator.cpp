@@ -24,8 +24,8 @@ void Generator::Update(Field* field)
 	//マウス情報取得
 	GetMousePoint(&mouseX, &mouseY);
 	//マウス情報をマップチップ座標化
-	mouseMapPointX = mouseX / 100;
-	mouseMapPointY = mouseY / 100;
+	mouseMapPointX = mouseX / field_->gridLength;
+	mouseMapPointY = mouseY / field_->gridLength;
 
 	//すでにあるやつをつなぐ
 	ConnectGenerator();
@@ -157,7 +157,7 @@ void Generator::Update(Field* field)
 void Generator::Draw()
 {
 	if (have_ == true) {
-		DrawCircle(mouseX, mouseY, 50, GetColor(255, 255, 255));
+		DrawCircle(mouseX, mouseY, field_->gridLength / 2, GetColor(255, 255, 255));
 	}
 	else {
 		DrawFormatString(100, 0, GetColor(255, 255, 255), "RIGHT_CLICK : ANDO");

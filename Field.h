@@ -50,6 +50,6 @@ public:
 	bool isAndo;
 
 	//グリッドの長さ
-	static const int gridLength = 100;
+	static const int gridLength = 50;
 };
 
