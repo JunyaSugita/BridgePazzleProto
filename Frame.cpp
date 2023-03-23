@@ -56,7 +56,7 @@ void Frame::Initialize()
 		{
 			std::unique_ptr <Generator> generator_;
 			generator_ = std::make_unique<Generator>();
-			generator_->Initialize(fields_[i][j].get());
+			generator_->Initialize(fields_[j][i].get());
 			//ƒŒƒCƒ„[‚Ì—v‘f‚ð’Ç‰Á
 			generators_[i].push_back(std::move(generator_));
 		}
@@ -90,7 +90,7 @@ void Frame::Update()
 		{
 			fields_[i][j]->Update();
 			//generator_->Update(fields_[i][j].get(),mouseX,mouseY, mouseMapPointX, mouseMapPointY);
-			generators_[i][j]->Update(fields_[i][j].get(), mouseX, mouseY, mouseMapPointX, mouseMapPointY ,i,j);
+			generators_[i][j]->Update(fields_[j][i].get(), mouseX, mouseY, mouseMapPointX, mouseMapPointY ,i,j);
 
 		}
 	}	
