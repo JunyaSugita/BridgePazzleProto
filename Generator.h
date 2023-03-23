@@ -9,7 +9,7 @@ public:
 
 public:
 	void Initialize(Field* field);
-	void Update(Field* field,int mouseX, int mouseY, int mouseMapPointX, int mouseMapPointY, int i, int j);
+	void Update(Field* field,int mouseX, int mouseY, int i, int j);
 	void Draw(int mouseX, int mouseY);
 
 	/// <summary>
@@ -23,7 +23,7 @@ public:
 public:
 	Field* field_;
 	//int mouseX_, mouseY_;
-	//int mouseMapPointX, mouseMapPointY;
+	int mouseMapPointX, mouseMapPointY;
 	
 	int haveNum_;
 	bool have_;

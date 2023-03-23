@@ -18,11 +18,14 @@ void Generator::Initialize(Field* field)
 	ConnectGenerator();
 }
 
-void Generator::Update(Field* field,int mouseX, int mouseY, int mouseMapPointX, int mouseMapPointY,int i,int j)
+void Generator::Update(Field* field,int mouseX, int mouseY,int i,int j)
 {
 	//フィールド情報取得
 	field_ = field;
-	
+
+	//マウス情報をマップチップ座標化
+	mouseMapPointX = (mouseX - field_->pos.x) / 60;
+	mouseMapPointY = (mouseY - field_->pos.y) / 60;
 
 	//マウスが自分の持っているフィールド内にいるかどうか
 	if(mouseX > field_->pos.x && mouseX < field_->pos.x + 300 && mouseY > field_->pos.y && mouseY  < field_->pos.y + 300)
@@ -37,81 +40,88 @@ void Generator::Update(Field* field,int mouseX, int mouseY, int mouseMapPointX, 
 	//すでにあるやつをつなぐ
 	ConnectGenerator();
 
-	//クリックしている時
-	if((GetMouseInput() & MOUSE_INPUT_LEFT) != 0)
+	if(isUpdate == true)
 	{
-		//クリックした瞬間
-		if(have_ == false)
+		//クリックしている時
+		if((GetMouseInput() & MOUSE_INPUT_LEFT) != 0)
 		{
-			//つかんだ場所を記録
-			oldHavePosX_ = mouseMapPointX;
-			oldHavePosY_ = mouseMapPointY;
-
-			//持っている数字を記録
-			haveNum_ = field_->GetMapNum(mouseMapPointX, mouseMapPointY);
-
-			//動かせる物なら
-			if(haveNum_ > 0 && haveNum_ <= 9)
+			//クリックした瞬間
+			if(have_ == false)
 			{
-				for(int i = 0; i < field_->ANDO_MAP_CONST; i++)
+				//つかんだ場所を記録
+				oldHavePosX_ = mouseMapPointX;
+				oldHavePosY_ = mouseMapPointY;
+
+				//持っている数字を記録
+				haveNum_ = field_->GetMapNum(mouseMapPointX, mouseMapPointY);
+				//↑ここで範囲外を選択してしまっているので
+				//[0][0]以外では0が返されてしまう
+
+				//動かせる物なら
+				if(haveNum_ > 0 && haveNum_ <= 9)
 				{
-					if(field_->andoMapActive[i] == false)
+					for(int i = 0; i < field_->ANDO_MAP_CONST; i++)
 					{
-						for(int j = 0; j < gridY; j++)
+						if(field_->andoMapActive[i] == false)
 						{
-							for(int k = 0; k < gridY; k++)
+							for(int j = 0; j < gridY; j++)
 							{
-								field_->andoMap[i][j][k] = field_->map[j][k];
-								field_->andoMapActive[i] = true;
+								for(int k = 0; k < gridY; k++)
+								{
+									field_->andoMap[i][j][k] = field_->map[j][k];
+									field_->andoMapActive[i] = true;
+								}
 							}
+							break;
 						}
+					}
+					//持っているフラグを立てる
+					have_ = true;
+					//マップ情報から持ち上げた情報を削除
+					field_->SetMapNum(mouseMapPointX, mouseMapPointY, 0);
+
+					Disconnectgenerator(mouseMapPointX, mouseMapPointY);
+
+				}
+			}
+		}
+		//クリックしていなくて持っているフラグがtrueの時
+		//(発電機を置くとき)
+		else if(have_ == true)
+		{
+			//発電機を置く場所が空白の場所では無い時
+			if(field_->GetMapNum(mouseMapPointX, mouseMapPointY) != 0)
+			{
+				for(int i = field_->ANDO_MAP_CONST - 1; i >= 0; i--)
+				{
+					if(field_->andoMapActive[i] == true)
+					{
+						field_->andoMapActive[i] = false;
 						break;
 					}
 				}
-				//持っているフラグを立てる
-				have_ = true;
-				//マップ情報から持ち上げた情報を削除
-				field_->SetMapNum(mouseMapPointX, mouseMapPointY, 0);
-
-				Disconnectgenerator(mouseMapPointX,mouseMapPointY);
-
+				//発電機を元の位置に戻す
+				field_->SetMapNum(oldHavePosX_, oldHavePosY_, haveNum_);
+				//何も持ってないことにする
+				haveNum_ = 0;
+				//持っているフラグをfalseに
+				have_ = false;
 			}
-		}
-	}
-	//クリックしていなくて持っているフラグがtrueの時
-	//(発電機を置くとき)
-	else if(have_ == true)
-	{
-		//発電機を置く場所が空白の場所では無い時
-		if(field_->GetMapNum(mouseMapPointX, mouseMapPointY) != 0)
-		{
-			for(int i = field_->ANDO_MAP_CONST - 1; i >= 0; i--)
+			//発電機を置く場所が空白の時
+			else
 			{
-				if(field_->andoMapActive[i] == true)
-				{
-					field_->andoMapActive[i] = false;
-					break;
-				}
-			}
-			//発電機を元の位置に戻す
-			field_->SetMapNum(oldHavePosX_, oldHavePosY_, haveNum_);
-			//何も持ってないことにする
-			haveNum_ = 0;
-			//持っているフラグをfalseに
-			have_ = false;
-		}
-		//発電機を置く場所が空白の時
-		else
-		{
 
-			//クリックをやめた場所に発電機を設置
-			field_->SetMapNum(mouseMapPointX, mouseMapPointY, haveNum_);
-			//何も持ってないことにする
-			haveNum_ = 0;
-			//持っているフラグをfalseに
-			have_ = false;
+				//クリックをやめた場所に発電機を設置
+				field_->SetMapNum(mouseMapPointX, mouseMapPointY, haveNum_);
+				//何も持ってないことにする
+				haveNum_ = 0;
+				//持っているフラグをfalseに
+				have_ = false;
+			}
 		}
 	}
+
+	
 }
 
 void Generator::Draw(int mouseX, int mouseY)

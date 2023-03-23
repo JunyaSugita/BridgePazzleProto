@@ -56,7 +56,7 @@ private:
 	Generator* generator_;
 
 	int mouseX, mouseY;
-	int mouseMapPointX, mouseMapPointY;
+	
 
 
 public: //ƒQƒbƒ^[

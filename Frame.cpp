@@ -79,10 +79,7 @@ void Frame::Update()
 {
 	//マウス情報取得
 	GetMousePoint(&mouseX, &mouseY);
-	//マウス情報をマップチップ座標化
-	mouseMapPointX = mouseX / 60;
-	mouseMapPointY = mouseY / 60;
-
+	
 
 	for(int i = 0; i < MaxFrameX; i++)
 	{
@@ -90,7 +87,7 @@ void Frame::Update()
 		{
 			fields_[i][j]->Update();
 			//generator_->Update(fields_[i][j].get(),mouseX,mouseY, mouseMapPointX, mouseMapPointY);
-			generators_[i][j]->Update(fields_[j][i].get(), mouseX, mouseY, mouseMapPointX, mouseMapPointY ,i,j);
+			generators_[i][j]->Update(fields_[j][i].get(), mouseX, mouseY ,i,j);
 
 		}
 	}	
