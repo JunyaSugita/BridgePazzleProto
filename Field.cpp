@@ -1,5 +1,7 @@
 #include "Field.h"
 
+
+
 Field::Field()
 {
 }
@@ -34,11 +36,50 @@ void Field::Initialize()
 			map[i][j] = tempMap[i][j];
 		}
 	}
+
+	for(int i = ANDO_MAP_CONST - 1; i >= 0; i--)
+	{
+		for(int j = 0; j < gridY; j++)
+		{
+			for(int k = 0; k < gridY; k++)
+			{
+				andoMap[i][j][k] = 0;
+				andoMapActive[i] = false;
+			}
+		}
+	}
 }
 
 void Field::Update()
 {
-
+	//右クリックで1手戻る
+	if((GetMouseInput() & MOUSE_INPUT_RIGHT) != 0)
+	{
+		if(isAndo == false)
+		{
+			//1番新しい情報を探す
+			for(int i = ANDO_MAP_CONST - 1; i >= 0; i--)
+			{
+				if(andoMapActive[i] == true)
+				{
+					for(int j = 0; j < gridY; j++)
+					{
+						for(int k = 0; k < gridX; k++)
+						{
+							map[j][k] = andoMap[i][j][k];
+							andoMapActive[i] = false;
+						}
+					}
+					break;
+				}
+			}
+			isAndo = true;
+		}
+	}
+	else
+	{
+		isAndo = false;
+	}
 }
 
 void Field::Draw(int height, int wide)

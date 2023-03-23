@@ -13,72 +13,18 @@ void Generator::Initialize(Field* field)
 {
 	field_ = field;
 	have_ = false;
-	haveNum_ = 0;
-
+	
 	//すでにあるやつをつなぐ
-	for (int i = 0; i < gridY; i++) {
-		for (int j = 0; j < gridX; j++) {
-			if (field_->map[i][j] > 0 && field_->map[i][j] < 20) {
-				//繋がり検索
-				//上
-				for (int k = i - 1; k >= 0; k--) {
-					if (field->map[k][j] < 20 && field->map[k][j] >= 1) {
-						for (int l = k + 1; l < i; l++) {
-							field_->SetMapNum(j, l, 20);
-						}
-						break;
-					}
-					else if (field->map[k][j] != 0) {
-						break;
-					}
-				}
-				//下
-				for (int k = i + 1; k < gridY; k++) {
-					if (field->map[k][j] < 20 && field->map[k][j] >= 1) {
-						for (int l = k - 1; l > i; l--) {
-							field_->SetMapNum(j, l, 20);
-						}
-						break;
-					}
-					else if (field->map[k][j] != 0) {
-						break;
-					}
-				}
-
-				//左
-				for (int k = j - 1; k >= 0; k--) {
-					if (field->map[i][k] < 20 && field->map[i][k] >= 1) {
-						for (int l = k + 1; l < j; l++) {
-							field_->SetMapNum(l, i, 21);
-						}
-						break;
-					}
-					else if (field->map[i][k] != 0) {
-						break;
-					}
-				}
-				//右
-				for (int k = j + 1; k < gridX; k++) {
-					if (field->map[i][k] < 20 && field->map[i][k] >= 1) {
-						for (int l = k - 1; l > j; l--) {
-							field_->SetMapNum(l, i, 21);
-						}
-						break;
-					}
-					else if (field->map[i][k] != 0) {
-						break;
-					}
-				}
-			}
-		}
-	}
+	ConnectGenerator();
 }
 
 void Generator::Update(Field* field,int mouseX, int mouseY, int mouseMapPointX, int mouseMapPointY,int i,int j)
 {
 	//フィールド情報取得
 	field_ = field;
+	
 
+	//マウスが自分の持っているフィールド内にいるかどうか
 	if(mouseX > field_->pos.x && mouseX < field_->pos.x + 300 && mouseY > field_->pos.y && mouseY  < field_->pos.y + 300)
 	{
 		isUpdate = true;	
@@ -87,363 +33,217 @@ void Generator::Update(Field* field,int mouseX, int mouseY, int mouseMapPointX, 
 	{
 		isUpdate = false;
 	}
-	
-	if(isUpdate == true)
+
+	//すでにあるやつをつなぐ
+	ConnectGenerator();
+
+	//クリックしている時
+	if((GetMouseInput() & MOUSE_INPUT_LEFT) != 0)
 	{
-		//ショートしている場所の線を消す
-		for(int i = 0; i < gridY; i++)
+		//クリックした瞬間
+		if(have_ == false)
 		{
-			for(int j = 0; j < gridX; j++)
+			//つかんだ場所を記録
+			oldHavePosX_ = mouseMapPointX;
+			oldHavePosY_ = mouseMapPointY;
+
+			//持っている数字を記録
+			haveNum_ = field_->GetMapNum(mouseMapPointX, mouseMapPointY);
+
+			//動かせる物なら
+			if(haveNum_ > 0 && haveNum_ <= 9)
 			{
-				if(field_->shortMap[i][j] == true)
+				for(int i = 0; i < field_->ANDO_MAP_CONST; i++)
 				{
-					//繋がり検索
-					//上
-					for(int k = i - 1; k >= 0; k--)
+					if(field_->andoMapActive[i] == false)
 					{
-						if(field_->GetMapNum(j, k) == 20)
+						for(int j = 0; j < gridY; j++)
 						{
-							field_->SetMapNum(j, k, 0);
-						}
-						else
-						{
-							break;
-						}
-					}
-					//下
-					for(int k = i + 1; k < gridY; k++)
-					{
-						if(field_->GetMapNum(j, k) == 20)
-						{
-							field_->SetMapNum(j, k, 0);
-						}
-						else
-						{
-							break;
-						}
-					}
-					//左
-					for(int k = j - 1; k >= 0; k--)
-					{
-						if(field_->GetMapNum(k, i) == 21)
-						{
-							field_->SetMapNum(k, i, 0);
-						}
-						else
-						{
-							break;
-						}
-					}
-					//下
-					for(int k = j + 1; k < gridY; k++)
-					{
-						if(field_->GetMapNum(k, i) == 21)
-						{
-							field_->SetMapNum(k, i, 0);
-						}
-						else
-						{
-							break;
-						}
-					}
-				}
-			}
-		}
-
-		//クリックしている時
-		if((GetMouseInput() & MOUSE_INPUT_LEFT) != 0)
-		{
-			//クリックした瞬間
-			if(have_ == false)
-			{
-				//つかんだ場所を記録
-				oldHavePosX_ = mouseMapPointX;
-				oldHavePosY_ = mouseMapPointY;
-
-				//持っている数字を記録
-				haveNum_ = field_->GetMapNum(mouseMapPointX, mouseMapPointY);
-
-				//動かせる物なら
-				if(haveNum_ > 0 && haveNum_ <= 9)
-				{
-					//持っているフラグを立てる
-					have_ = true;
-					//マップ情報から持ち上げた情報を削除
-					field_->SetMapNum(mouseMapPointX, mouseMapPointY, 0);
-
-					//繋がり検索
-					//上
-					for(int i = mouseMapPointY - 1; i >= 0; i--)
-					{
-						if(field_->GetMapNum(mouseMapPointX, i) == 20)
-						{
-							field_->SetMapNum(mouseMapPointX, i, 0);
-						}
-						else
-						{
-							break;
-						}
-					}
-					//下
-					for(int i = mouseMapPointY + 1; i < gridY; i++)
-					{
-						if(field_->GetMapNum(mouseMapPointX, i) == 20)
-						{
-							field_->SetMapNum(mouseMapPointX, i, 0);
-						}
-						else
-						{
-							break;
-						}
-					}
-					//左
-					for(int i = mouseMapPointX - 1; i >= 0; i--)
-					{
-						if(field_->GetMapNum(i, mouseMapPointY) == 21)
-						{
-							field_->SetMapNum(i, mouseMapPointY, 0);
-						}
-						else
-						{
-							break;
-						}
-					}
-					//下
-					for(int i = mouseMapPointX + 1; i < gridY; i++)
-					{
-						if(field_->GetMapNum(i, mouseMapPointY) == 21)
-						{
-							field_->SetMapNum(i, mouseMapPointY, 0);
-						}
-						else
-						{
-							break;
-						}
-					}
-
-					//すでにあるやつをつなぐ
-					for(int i = 0; i < gridY; i++)
-					{
-						for(int j = 0; j < gridX; j++)
-						{
-							if(field_->map[i][j] > 0 && field_->map[i][j] < 20)
+							for(int k = 0; k < gridY; k++)
 							{
-								//繋がり検索
-								//上
-								for(int k = i - 1; k >= 0; k--)
-								{
-									if(field->map[k][j] < 20 && field->map[k][j] >= 1)
-									{
-										for(int l = k + 1; l < i; l++)
-										{
-											field_->SetMapNum(j, l, 20);
-										}
-										break;
-									}
-									else if(field->map[k][j] != 0)
-									{
-										break;
-									}
-								}
-								//下
-								for(int k = i + 1; k < gridY; k++)
-								{
-									if(field->map[k][j] < 20 && field->map[k][j] >= 1)
-									{
-										for(int l = k - 1; l > i; l--)
-										{
-											field_->SetMapNum(j, l, 20);
-										}
-										break;
-									}
-									else if(field->map[k][j] != 0)
-									{
-										break;
-									}
-								}
-
-								//左
-								for(int k = j - 1; k >= 0; k--)
-								{
-									if(field->map[i][k] < 20 && field->map[i][k] >= 1)
-									{
-										for(int l = k + 1; l < j; l++)
-										{
-											field_->SetMapNum(l, i, 21);
-										}
-										break;
-									}
-									else if(field->map[i][k] != 0)
-									{
-										break;
-									}
-								}
-								//右
-								for(int k = j + 1; k < gridX; k++)
-								{
-									if(field->map[i][k] < 20 && field->map[i][k] >= 1)
-									{
-										for(int l = k - 1; l > j; l--)
-										{
-											field_->SetMapNum(l, i, 21);
-										}
-										break;
-									}
-									else if(field->map[i][k] != 0)
-									{
-										break;
-									}
-								}
+								field_->andoMap[i][j][k] = field_->map[j][k];
+								field_->andoMapActive[i] = true;
 							}
 						}
+						break;
 					}
-
 				}
+				//持っているフラグを立てる
+				have_ = true;
+				//マップ情報から持ち上げた情報を削除
+				field_->SetMapNum(mouseMapPointX, mouseMapPointY, 0);
+
+				Disconnectgenerator(mouseMapPointX,mouseMapPointY);
+
 			}
 		}
-		else if(have_ == true)
+	}
+	//クリックしていなくて持っているフラグがtrueの時
+	//(発電機を置くとき)
+	else if(have_ == true)
+	{
+		//発電機を置く場所が空白の場所では無い時
+		if(field_->GetMapNum(mouseMapPointX, mouseMapPointY) != 0)
 		{
-			if(field_->GetMapNum(mouseMapPointX, mouseMapPointY) != 0)
+			for(int i = field_->ANDO_MAP_CONST - 1; i >= 0; i--)
 			{
-				field_->SetMapNum(oldHavePosX_, oldHavePosY_, haveNum_);
-				haveNum_ = 0;
-				have_ = false;
-
-				//繋がり検索
-				//上
-				for(int i = oldHavePosY_ - 1; i >= 0; i--)
+				if(field_->andoMapActive[i] == true)
 				{
-					if(field->map[i][oldHavePosX_] < 20 && field->map[i][oldHavePosX_] >= 1)
-					{
-						for(int j = i + 1; j < oldHavePosY_; j++)
-						{
-							field_->SetMapNum(oldHavePosX_, j, 20);
-						}
-						break;
-					}
-					else if(field->map[i][oldHavePosX_] != 0)
-					{
-						break;
-					}
-				}
-				//下
-				for(int i = oldHavePosY_ + 1; i < gridY; i++)
-				{
-					if(field->map[i][oldHavePosX_] < 20 && field->map[i][oldHavePosX_] >= 1)
-					{
-						for(int j = i - 1; j > oldHavePosY_; j--)
-						{
-							field_->SetMapNum(oldHavePosX_, j, 20);
-						}
-						break;
-					}
-					else if(field->map[i][oldHavePosX_] != 0)
-					{
-						break;
-					}
-				}
-
-				//左
-				for(int i = oldHavePosX_ - 1; i >= 0; i--)
-				{
-					if(field->map[oldHavePosY_][i] < 20 && field->map[oldHavePosY_][i] >= 1)
-					{
-						for(int j = i + 1; j < oldHavePosX_; j++)
-						{
-							field_->SetMapNum(j, oldHavePosY_, 21);
-						}
-						break;
-					}
-					else if(field->map[oldHavePosY_][i] != 0)
-					{
-						break;
-					}
-				}
-				//右
-				for(int i = oldHavePosX_ + 1; i < gridX; i++)
-				{
-					if(field->map[oldHavePosY_][i] < 20 && field->map[oldHavePosY_][i] >= 1)
-					{
-						for(int j = i - 1; j > oldHavePosX_; j--)
-						{
-							field_->SetMapNum(j, oldHavePosY_, 21);
-						}
-						break;
-					}
-					else if(field->map[oldHavePosY_][i] != 0)
-					{
-						break;
-					}
+					field_->andoMapActive[i] = false;
+					break;
 				}
 			}
-			else
-			{
-				field_->SetMapNum(mouseMapPointX, mouseMapPointY, haveNum_);
-				haveNum_ = 0;
-				have_ = false;
+			//発電機を元の位置に戻す
+			field_->SetMapNum(oldHavePosX_, oldHavePosY_, haveNum_);
+			//何も持ってないことにする
+			haveNum_ = 0;
+			//持っているフラグをfalseに
+			have_ = false;
+		}
+		//発電機を置く場所が空白の時
+		else
+		{
 
+			//クリックをやめた場所に発電機を設置
+			field_->SetMapNum(mouseMapPointX, mouseMapPointY, haveNum_);
+			//何も持ってないことにする
+			haveNum_ = 0;
+			//持っているフラグをfalseに
+			have_ = false;
+		}
+	}
+}
+
+void Generator::Draw(int mouseX, int mouseY)
+{
+	/*if (have_ == true) {
+		DrawCircle(mouseX ,mouseY, 30, GetColor(255, 255, 255));
+		DrawFormatString(mouseX, mouseY, GetColor(0, 0, 0), "%d", haveNum_);
+	}
+	else
+	{
+		DrawFormatString(100, 0, GetColor(255, 255, 255), "RIGHT_CLICK : ANDO");
+	}*/
+}
+
+void Generator::ConnectGenerator()
+{
+	for(int i = 0; i < gridY; i++)
+	{
+		for(int j = 0; j < gridX; j++)
+		{
+			if(field_->map[i][j] > 0 && field_->map[i][j] < 20)
+			{
 				//繋がり検索
 				//上
-				for(int i = mouseMapPointY - 1; i >= 0; i--)
+				for(int k = i - 1; k >= 0; k--)
 				{
-					if(field->map[i][mouseMapPointX] < 20 && field->map[i][mouseMapPointX] >= 1)
+					//発電機を探す
+					if(field_->map[k][j] < 20 && field_->map[k][j] >= 1)
 					{
-						for(int j = i + 1; j < mouseMapPointY; j++)
+						//あればそこまで線を引く
+						for(int l = k + 1; l < i; l++)
 						{
-							field_->SetMapNum(mouseMapPointX, j, 20);
+							//線の場所が空白なら縦線を入れる
+							if(field_->map[l][j] == 0)
+							{
+								field_->SetMapNum(j, l, 20);
+							}
+							//すでに横線があれば十字にする
+							else if(field_->map[l][j] == 21)
+							{
+								field_->SetMapNum(j, l, 22);
+							}
 						}
 						break;
 					}
-					else if(field->map[i][mouseMapPointX] != 0)
+					//壁なら終了
+					else if(field_->map[k][j] == -1)
 					{
 						break;
 					}
 				}
 				//下
-				for(int i = mouseMapPointY + 1; i < gridY; i++)
+				for(int k = i + 1; k < gridY; k++)
 				{
-					if(field->map[i][mouseMapPointX] < 20 && field->map[i][mouseMapPointX] >= 1)
+					//発電機を探す
+					if(field_->map[k][j] < 20 && field_->map[k][j] >= 1)
 					{
-						for(int j = i - 1; j > mouseMapPointY; j--)
+						//あればそこまで線を引く
+						for(int l = k - 1; l > i; l--)
 						{
-							field_->SetMapNum(mouseMapPointX, j, 20);
+							//線の場所が空白なら縦線を入れる
+							if(field_->map[l][j] == 0)
+							{
+								field_->SetMapNum(j, l, 20);
+							}
+							//すでに横線があれば十字にする
+							else if(field_->map[l][j] == 21)
+							{
+								field_->SetMapNum(j, l, 22);
+							}
 						}
 						break;
 					}
-					else if(field->map[i][mouseMapPointX] != 0)
+					//壁なら終了
+					else if(field_->map[k][j] == -1)
 					{
 						break;
 					}
 				}
 
 				//左
-				for(int i = mouseMapPointX - 1; i >= 0; i--)
+				for(int k = j - 1; k >= 0; k--)
 				{
-					if(field->map[mouseMapPointY][i] < 20 && field->map[mouseMapPointY][i] >= 1)
+					//発電機を探す
+					if(field_->map[i][k] < 20 && field_->map[i][k] >= 1)
 					{
-						for(int j = i + 1; j < mouseMapPointX; j++)
+						//あればそこまで線を引く
+						for(int l = k + 1; l < j; l++)
 						{
-							field_->SetMapNum(j, mouseMapPointY, 21);
+							//線の場所が空白なら横線を入れる
+							if(field_->map[i][l] == 0)
+							{
+								field_->SetMapNum(l, i, 21);
+							}
+							//すでに縦線があれば十字にする
+							else if(field_->map[i][l] == 20)
+							{
+								field_->SetMapNum(l, i, 22);
+							}
 						}
 						break;
 					}
-					else if(field->map[mouseMapPointY][i] != 0)
+					//壁なら終了
+					else if(field_->map[i][k] == -1)
 					{
 						break;
 					}
 				}
 				//右
-				for(int i = mouseMapPointX + 1; i < gridX; i++)
+				for(int k = j + 1; k < gridX; k++)
 				{
-					if(field->map[mouseMapPointY][i] < 20 && field->map[mouseMapPointY][i] >= 1)
+					//発電機を探す
+					if(field_->map[i][k] < 20 && field_->map[i][k] >= 1)
 					{
-						for(int j = i - 1; j > mouseMapPointX; j--)
+						//あればそこまで線を引く
+						for(int l = k - 1; l > j; l--)
 						{
-							field_->SetMapNum(j, mouseMapPointY, 21);
+							//線の場所が空白なら横線を入れる
+							if(field_->map[i][l] == 0)
+							{
+								field_->SetMapNum(l, i, 21);
+							}
+							//すでに縦線があれば十字にする
+							else if(field_->map[i][l] == 20)
+							{
+								field_->SetMapNum(l, i, 22);
+							}
 						}
 						break;
 					}
-					else if(field->map[mouseMapPointY][i] != 0)
+					//壁なら終了
+					else if(field_->map[i][k] == -1)
 					{
 						break;
 					}
@@ -453,10 +253,83 @@ void Generator::Update(Field* field,int mouseX, int mouseY, int mouseMapPointX, 
 	}
 }
 
-void Generator::Draw(int mouseX, int mouseY)
+void Generator::Disconnectgenerator(int mouseMapPointX,int mouseMapPointY)
 {
-	if (have_ == true) {
-		DrawCircle(mouseX_ ,mouseY_, 30, GetColor(255, 255, 255));
-		DrawFormatString(mouseX_, mouseY_, GetColor(0, 0, 0), "%d", haveNum_);
+	//繋がり検索
+	//上
+	for(int i = mouseMapPointY - 1; i >= 0; i--)
+	{
+		//縦線を消す
+		if(field_->GetMapNum(mouseMapPointX, i) == 20)
+		{
+			field_->SetMapNum(mouseMapPointX, i, 0);
+		}
+		//十字なら横線にする
+		else if(field_->GetMapNum(mouseMapPointX, i) == 22)
+		{
+			field_->SetMapNum(mouseMapPointX, i, 21);
+		}
+		//線でなければ終了
+		else
+		{
+			break;
+		}
+	}
+	//下
+	for(int i = mouseMapPointY + 1; i < gridY; i++)
+	{
+		//縦線を消す
+		if(field_->GetMapNum(mouseMapPointX, i) == 20)
+		{
+			field_->SetMapNum(mouseMapPointX, i, 0);
+		}
+		//十字なら横線にする
+		else if(field_->GetMapNum(mouseMapPointX, i) == 22)
+		{
+			field_->SetMapNum(mouseMapPointX, i, 21);
+		}
+		//線でなければ終了
+		else
+		{
+			break;
+		}
+	}
+	//左
+	for(int i = mouseMapPointX - 1; i >= 0; i--)
+	{
+		//横線を消す
+		if(field_->GetMapNum(i, mouseMapPointY) == 21)
+		{
+			field_->SetMapNum(i, mouseMapPointY, 0);
+		}
+		//十字なら縦線にする
+		else if(field_->GetMapNum(i, mouseMapPointY) == 22)
+		{
+			field_->SetMapNum(i, mouseMapPointY, 20);
+		}
+		//線でなければ終了
+		else
+		{
+			break;
+		}
+	}
+	//下
+	for(int i = mouseMapPointX + 1; i < gridY; i++)
+	{
+		//横線を消す
+		if(field_->GetMapNum(i, mouseMapPointY) == 21)
+		{
+			field_->SetMapNum(i, mouseMapPointY, 0);
+		}
+		//十字なら縦線にする
+		else if(field_->GetMapNum(i, mouseMapPointY) == 22)
+		{
+			field_->SetMapNum(i, mouseMapPointY, 20);
+		}
+		//線でなければ終了
+		else
+		{
+			break;
+		}
 	}
 }

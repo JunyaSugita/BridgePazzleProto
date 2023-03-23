@@ -2,6 +2,17 @@
 #include "DxLib.h"
 #include "GrovalSetting.h"
 
+//進む方向用
+enum MoveDirection
+{
+	NONE,//進まない
+	LEFT,//左
+	UP,//上
+	RIGHT,//右
+	DOWN,//下
+};
+
+
 class Field
 {
 public:
@@ -29,6 +40,13 @@ public:
 	/// <param name="num">セットしたいマップチップ番号</param>
 	void SetMapNum(int x, int y, int num);
 
+	//進める場所か返す
+	static bool CanMoveGrid(int y, int x, int moveDirection);
+	//playerがブロックとか押す用
+	static bool PullBlock(int y, int x, int moveDirection);
+	//押せるかどうかだけ（移動したりはしない）
+	static bool GetPullBlock(int y, int x, int moveDirection);
+
 	/// <summary>
 	/// フィールドの座標をセットする
 	/// </summary>
@@ -37,6 +55,12 @@ public:
 public:
 	int map[gridY][gridX];
 	bool shortMap[gridY][gridX];
+
+	//アンドゥ用
+	static const int ANDO_MAP_CONST = 50;
+	int andoMap[ANDO_MAP_CONST][gridY][gridX];
+	bool andoMapActive[ANDO_MAP_CONST];
+	bool isAndo;
 
 	//グリッドの長さ
 	static const int gridLength = 100;
