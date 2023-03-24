@@ -20,6 +20,10 @@ private:
 	//枠の縦の最大数
 	static const int MaxFrameY = 3;
 
+	//全体のマップチップ総数
+	const int frameMaptipX = MaxFrameX * gridX; //15
+	const int frameMaptipY = MaxFrameY * gridY; //15
+
 
 	/*static const int layerFrameWidth = 3;
 	static const int layerFrameHeight = 3;
