@@ -27,6 +27,8 @@ void Generator::Update(Field* field)
 	mouseMapPointX = mouseX / field_->gridLength;
 	mouseMapPointY = mouseY / field_->gridLength;
 
+	//繋がりを消す
+	Disconnectgenerator();
 	//すでにあるやつをつなぐ
 	ConnectGenerator();
 
@@ -59,7 +61,7 @@ void Generator::Update(Field* field)
 				//マップ情報から持ち上げた情報を削除
 				field_->SetMapNum(mouseMapPointX, mouseMapPointY, 0);
 
-				Disconnectgenerator();
+				//Disconnectgenerator();
 				
 			}
 		}
@@ -207,65 +209,79 @@ void Generator::ConnectGenerator()
 
 void Generator::Disconnectgenerator()
 {
-	//繋がり検索
-	//上
-	for (int i = mouseMapPointY - 1; i >= 0; i--) {
-		//縦線を消す
-		if (field_->GetMapNum(mouseMapPointX, i) == 20) {
-			field_->SetMapNum(mouseMapPointX, i, 0);
-		}
-		//十字なら横線にする
-		else if (field_->GetMapNum(mouseMapPointX, i) == 22) {
-			field_->SetMapNum(mouseMapPointX, i, 21);
-		}
-		//線でなければ終了
-		else {
-			break;
-		}
-	}
-	//下
-	for (int i = mouseMapPointY + 1; i < gridY; i++) {
-		//縦線を消す
-		if (field_->GetMapNum(mouseMapPointX, i) == 20) {
-			field_->SetMapNum(mouseMapPointX, i, 0);
-		}
-		//十字なら横線にする
-		else if (field_->GetMapNum(mouseMapPointX, i) == 22) {
-			field_->SetMapNum(mouseMapPointX, i, 21);
-		}
-		//線でなければ終了
-		else {
-			break;
-		}
-	}
-	//左
-	for (int i = mouseMapPointX - 1; i >= 0; i--) {
-		//横線を消す
-		if (field_->GetMapNum(i, mouseMapPointY) == 21) {
-			field_->SetMapNum(i, mouseMapPointY, 0);
-		}
-		//十字なら縦線にする
-		else if (field_->GetMapNum(i, mouseMapPointY) == 22) {
-			field_->SetMapNum(i, mouseMapPointY, 20);
-		}
-		//線でなければ終了
-		else {
-			break;
-		}
-	}
-	//下
-	for (int i = mouseMapPointX + 1; i < gridY; i++) {
-		//横線を消す
-		if (field_->GetMapNum(i, mouseMapPointY) == 21) {
-			field_->SetMapNum(i, mouseMapPointY, 0);
-		}
-		//十字なら縦線にする
-		else if (field_->GetMapNum(i, mouseMapPointY) == 22) {
-			field_->SetMapNum(i, mouseMapPointY, 20);
-		}
-		//線でなければ終了
-		else {
-			break;
+	////繋がり検索
+	////上
+	//for (int i = mouseMapPointY - 1; i >= 0; i--) {
+	//	//縦線を消す
+	//	if (field_->GetMapNum(mouseMapPointX, i) == 20) {
+	//		field_->SetMapNum(mouseMapPointX, i, 0);
+	//	}
+	//	//十字なら横線にする
+	//	else if (field_->GetMapNum(mouseMapPointX, i) == 22) {
+	//		field_->SetMapNum(mouseMapPointX, i, 21);
+	//	}
+	//	//線でなければ終了
+	//	else {
+	//		break;
+	//	}
+	//}
+	////下
+	//for (int i = mouseMapPointY + 1; i < gridY; i++) {
+	//	//縦線を消す
+	//	if (field_->GetMapNum(mouseMapPointX, i) == 20) {
+	//		field_->SetMapNum(mouseMapPointX, i, 0);
+	//	}
+	//	//十字なら横線にする
+	//	else if (field_->GetMapNum(mouseMapPointX, i) == 22) {
+	//		field_->SetMapNum(mouseMapPointX, i, 21);
+	//	}
+	//	//線でなければ終了
+	//	else {
+	//		break;
+	//	}
+	//}
+	////左
+	//for (int i = mouseMapPointX - 1; i >= 0; i--) {
+	//	//横線を消す
+	//	if (field_->GetMapNum(i, mouseMapPointY) == 21) {
+	//		field_->SetMapNum(i, mouseMapPointY, 0);
+	//	}
+	//	//十字なら縦線にする
+	//	else if (field_->GetMapNum(i, mouseMapPointY) == 22) {
+	//		field_->SetMapNum(i, mouseMapPointY, 20);
+	//	}
+	//	//線でなければ終了
+	//	else {
+	//		break;
+	//	}
+	//}
+	////下
+	//for (int i = mouseMapPointX + 1; i < gridY; i++) {
+	//	//横線を消す
+	//	if (field_->GetMapNum(i, mouseMapPointY) == 21) {
+	//		field_->SetMapNum(i, mouseMapPointY, 0);
+	//	}
+	//	//十字なら縦線にする
+	//	else if (field_->GetMapNum(i, mouseMapPointY) == 22) {
+	//		field_->SetMapNum(i, mouseMapPointY, 20);
+	//	}
+	//	//線でなければ終了
+	//	else {
+	//		break;
+	//	}
+	//}
+
+	for (int i = 0; i < gridY; i++) {
+		for (int j = 0; j < gridX; j++) {
+			if (field_->GetMapNum(i, mouseMapPointY) == 20) {
+				field_->SetMapNum(i, mouseMapPointY, 0);
+			}
+			if (field_->GetMapNum(i, mouseMapPointY) == 21) {
+				field_->SetMapNum(i, mouseMapPointY, 0);
+			}
+			if (field_->GetMapNum(i, mouseMapPointY) == 22) {
+				field_->SetMapNum(i, mouseMapPointY, 0);
+			}
 		}
 	}
 }
