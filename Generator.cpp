@@ -273,14 +273,14 @@ void Generator::Disconnectgenerator()
 
 	for (int i = 0; i < gridY; i++) {
 		for (int j = 0; j < gridX; j++) {
-			if (field_->GetMapNum(i, mouseMapPointY) == 20) {
-				field_->SetMapNum(i, mouseMapPointY, 0);
+			if (field_->GetMapNum(j, i) == 20) {
+				field_->SetMapNum(j, i, 0);
 			}
-			if (field_->GetMapNum(i, mouseMapPointY) == 21) {
-				field_->SetMapNum(i, mouseMapPointY, 0);
+			if (field_->GetMapNum(j, i) == 21) {
+				field_->SetMapNum(j, i, 0);
 			}
-			if (field_->GetMapNum(i, mouseMapPointY) == 22) {
-				field_->SetMapNum(i, mouseMapPointY, 0);
+			if (field_->GetMapNum(j, i) == 22) {
+				field_->SetMapNum(j, i, 0);
 			}
 		}
 	}
