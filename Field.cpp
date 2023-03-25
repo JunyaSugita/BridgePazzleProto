@@ -18,13 +18,12 @@ void Field::Initialize()
 	// 00 空間
 	// 1桁目　0 = 動かせる発電機(2桁目1~9まで)	
 	// 1桁目　1 = 動かせない発電機(2桁目1~9まで)
-	// 1桁目　2 = 初期の配線(2桁目 0 = 縦配線　　1 = 横配線)
+	// 1桁目　2 = 初期の配線(2桁目 0 = 縦配線　1 = 横配線　2 = 十字配線)※
 
-	// 初期配線は設定しなくても良いがその場合 "縦" が優先される
-	// 初期でクロスしている配線は縦が優先されるが縦部分がショートしているとバグる
+	// ※初期の配線は書かなくて良い
 
 	int tempMap[gridY][gridX] = {
-		{01,00,00,00,11},
+		{00,00,00,00,11},
 		{00,01,00,01,00},
 		{00,00,-1,00,00},
 		{00,01,00,01,00},
@@ -206,7 +205,7 @@ bool Field::PullBlock(int y, int x, int moveDirection)
 		Y = y;
 		X = x - 1;
 		//一個左に何もなかったら
-		if (moveDirection == LEFT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21)
+		if (moveDirection == LEFT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
 			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
 		{
 			map[Y][X] = map[y][x];
@@ -217,7 +216,7 @@ bool Field::PullBlock(int y, int x, int moveDirection)
 		Y = y - 1;
 		X = x;
 		//一個上に何もなかったら
-		if (moveDirection == UP && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21)
+		if (moveDirection == UP && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
 			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
 		{
 			map[Y][X] = map[y][x];
@@ -228,7 +227,7 @@ bool Field::PullBlock(int y, int x, int moveDirection)
 		Y = y;
 		X = x + 1;
 		//一個左に何もなかったら
-		if (moveDirection == RIGHT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21)
+		if (moveDirection == RIGHT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
 			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
 		{
 			map[Y][X] = map[y][x];
@@ -239,7 +238,7 @@ bool Field::PullBlock(int y, int x, int moveDirection)
 		Y = y + 1;
 		X = x;
 		//一個左に何もなかったら
-		if (moveDirection == DOWN && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21)
+		if (moveDirection == DOWN && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
 			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
 		{
 			map[Y][X] = map[y][x];
@@ -261,7 +260,7 @@ bool Field::GetPullBlock(int y, int x, int moveDirection)
 		Y = y;
 		X = x - 1;
 		//一個左に何もなかったら
-		if (moveDirection == LEFT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21)
+		if (moveDirection == LEFT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
 			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
 		{
 			return true;
@@ -270,7 +269,7 @@ bool Field::GetPullBlock(int y, int x, int moveDirection)
 		Y = y - 1;
 		X = x;
 		//一個上に何もなかったら
-		if (moveDirection == UP && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21)
+		if (moveDirection == UP && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
 			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
 		{
 			return true;
@@ -279,7 +278,7 @@ bool Field::GetPullBlock(int y, int x, int moveDirection)
 		Y = y;
 		X = x + 1;
 		//一個左に何もなかったら
-		if (moveDirection == RIGHT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21)
+		if (moveDirection == RIGHT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
 			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
 		{
 			return true;
@@ -288,7 +287,7 @@ bool Field::GetPullBlock(int y, int x, int moveDirection)
 		Y = y + 1;
 		X = x;
 		//一個左に何もなかったら
-		if (moveDirection == DOWN && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21)
+		if (moveDirection == DOWN && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
 			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
 		{
 			return true;
@@ -306,7 +305,7 @@ bool Field::CanMoveGrid(int y, int x, int moveDirection)
 		return true;
 	}
 	//押せなかったら
-	if (map[y][x] != 1 && map[y][x] != 11 && map[y][x] != -1)
+	if (map[y][x] != 1 && map[y][x] != 11 && map[y][x] != -1 && map[y][x] != 20 && map[y][x] != 21 && map[y][x] != 22)
 	{
 		return true;
 	}
