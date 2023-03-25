@@ -19,15 +19,16 @@ void Field::Initialize()
 	// 1桁目　0 = 動かせる発電機(2桁目1~9まで)	
 	// 1桁目　1 = 動かせない発電機(2桁目1~9まで)
 	// 1桁目　2 = 初期の配線(2桁目 0 = 縦配線　1 = 横配線　2 = 十字配線)※
+	// 1桁目　3 = ゴール
 
 	// ※初期の配線は書かなくて良い
 
 	int tempMap[gridY * panelY][gridX * panelX] = {
-		{00,00,00,01,00, 00,00,00,01,00},
+		{00,00,00,00,00, 01,00,00,00,00},
 		{00,00,00,00,00, 00,00,00,00,00},
+		{00,00,00,00,00, 00,00,00,30,00},
 		{00,00,00,00,00, 00,00,00,00,00},
-		{00,00,00,00,00, 00,00,00,00,00},
-		{00,00,00,00,00, 00,00,00,00,00}
+		{01,00,00,00,00, 01,00,00,00,00}
 	};
 
 
@@ -97,6 +98,9 @@ void Field::Update()
 
 void Field::Draw()
 {
+	//ゴールの色
+	bool isGoal = true;
+
 	//縦軸グリッド
 	for (int i = 1; i < gridY * panelY; i++) {
 		if (i % gridY == 0) {
@@ -177,6 +181,7 @@ void Field::Draw()
 					}
 					else if (count < map[i][j]) {
 						DrawCircle(j * gridLength + gridLength / 2, i * gridLength + gridLength / 2, gridLength / 2, GetColor(0, 0, 200));
+						isGoal = false;
 					}
 				}
 				//動かせない発電機
@@ -187,6 +192,7 @@ void Field::Draw()
 					}
 					else if (count < map[i][j] - 10) {
 						DrawBox(j * gridLength, i * gridLength, (j + 1) * gridLength, (i + 1) * gridLength, GetColor(0, 0, 200), true);
+						isGoal = false;
 					}
 				}
 				else {
@@ -210,6 +216,15 @@ void Field::Draw()
 			else if (map[i][j] == 22) {
 				DrawBox(j * gridLength + 40, i * gridLength, (j + 1) * gridLength - 40, (i + 1) * gridLength, GetColor(200, 200, 0), true);
 				DrawBox(j * gridLength, i * gridLength + 40, (j + 1) * gridLength, (i + 1) * gridLength - 40, GetColor(200, 200, 0), true);
+			}
+			//ゴール
+			else if (map[i][j] == 30) {
+				if (isGoal) {
+					DrawBox(j * gridLength, i * gridLength, (j + 1) * gridLength, (i + 1) * gridLength, GetColor(255, 0, 255), true);
+				}
+				else {
+					DrawBox(j * gridLength, i * gridLength, (j + 1) * gridLength, (i + 1) * gridLength, GetColor(55, 0, 55), true);
+				}
 			}
 		}
 	}
