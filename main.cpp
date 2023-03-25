@@ -9,10 +9,10 @@
 const char TITLE[] = "BridgePazzleProto";
 
 // ウィンドウ横幅
-const int WIN_WIDTH = gridX * 50;
+const int WIN_WIDTH = gridX * panelX * 50;
 
 // ウィンドウ縦幅
-const int WIN_HEIGHT = gridY * 50;
+const int WIN_HEIGHT = gridY * panelY * 50;
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,
 	_In_ int nCmdShow) {
@@ -36,7 +36,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SetBackgroundColor(0x00, 0x00, 0x00);
 
 	// DXlibの初期化
-	if (DxLib_Init() == -1) { return -1; }
+	if (DxLib_Init() == -1) {
+		return -1;
+	}
 
 	// (ダブルバッファ)描画先グラフィック領域は裏面を指定
 	SetDrawScreen(DX_SCREEN_BACK);

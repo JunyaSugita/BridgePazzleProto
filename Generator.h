@@ -41,7 +41,7 @@ public:
 	//マップチップ上のマウス座標
 	int mouseMapPointX, mouseMapPointY;
 	//今持っている発電機の数字(廃止され1のみに)
-	int haveNum_;
+	int haveNum_[gridY][gridX];
 	//発電機を持っているかのフラグ
 	bool have_;
 	//発電機の元の場所の記憶用

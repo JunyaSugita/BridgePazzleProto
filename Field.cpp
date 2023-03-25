@@ -1,7 +1,7 @@
 #include "Field.h"
 #include "Player.h"
 
-int Field::map[gridY][gridX] = {};
+int Field::map[gridY * panelY][gridX * panelX] = {};
 
 Field::Field()
 {
@@ -22,24 +22,46 @@ void Field::Initialize()
 
 	// ※初期の配線は書かなくて良い
 
-	int tempMap[gridY][gridX] = {
-		{00,00,00,00,11},
-		{00,01,00,01,00},
-		{00,00,-1,00,00},
-		{00,01,00,01,00},
-		{11,00,-1,00,01}
+	int tempMap[gridY * panelY][gridX * panelX] = {
+		{00,00,00,01,00, 00,00,00,01,00},
+		{00,00,00,00,00, 00,00,00,00,00},
+		{00,00,00,00,00, 00,00,00,00,00},
+		{00,00,00,00,00, 00,00,00,00,00},
+		{00,00,00,00,00, 00,00,00,00,00}
 	};
 
+
+	//パネルの置ける場所
+	// 0 = 無いが置ける,　1 = ある,　-1 = 置けない
+	int tempPanelMap[panelY][panelX] = {
+		{ 1, 1},
+		{ 0, -1},
+	};
+
+
 	//マップに情報を入れ込む
-	for (int i = 0; i < gridY; i++) {
-		for (int j = 0; j < gridX; j++) {
+	for (int i = 0; i < gridY * panelY; i++) {
+		for (int j = 0; j < gridX * panelX; j++) {
 			map[i][j] = tempMap[i][j];
 		}
 	}
+	for (int i = 0; i < panelY; i++) {
+		for (int j = 0; j < panelX; j++) {
+			panelMap[i][j] = tempPanelMap[i][j];
+			if (panelMap[i][j] == -1) {
+				for (int k = 0; k < gridY; k++) {
+					for (int l = 0; l < gridX; l++) {
+						SetMapNum(j * gridX + l, i * gridY + k, -1);
+					}
+				}
+			}
+		}
+	}
+
 
 	for (int i = ANDO_MAP_CONST - 1; i >= 0; i--) {
-		for (int j = 0; j < gridY; j++) {
-			for (int k = 0; k < gridY; k++) {
+		for (int j = 0; j < gridY * panelY; j++) {
+			for (int k = 0; k < gridX * panelX; k++) {
 				andoMap[i][j][k] = 0;
 				andoMapActive[i] = false;
 			}
@@ -55,8 +77,8 @@ void Field::Update()
 			//1番新しい情報を探す
 			for (int i = ANDO_MAP_CONST - 1; i >= 0; i--) {
 				if (andoMapActive[i] == true && i != 0) {
-					for (int j = 0; j < gridY; j++) {
-						for (int k = 0; k < gridX; k++) {
+					for (int j = 0; j < gridY * panelY; j++) {
+						for (int k = 0; k < gridX * panelX; k++) {
 							map[j][k] = andoMap[i - 1][j][k];
 							Player::GetInstance().SetPos(playerPos[i - 1]);
 							andoMapActive[i] = false;
@@ -76,16 +98,26 @@ void Field::Update()
 void Field::Draw()
 {
 	//縦軸グリッド
-	for (int i = 1; i < gridY; i++) {
-		DrawLine(gridLength * i, 0, gridLength * i, gridLength * gridY, GetColor(255, 255, 255));
+	for (int i = 1; i < gridY * panelY; i++) {
+		if (i % gridY == 0) {
+			DrawLine(gridLength * i, 0, gridLength * i, gridLength * gridY * panelY, GetColor(155, 0, 0), 5);
+		}
+		else {
+			DrawLine(gridLength * i, 0, gridLength * i, gridLength * gridY * panelY, GetColor(200, 200, 200));
+		}
 	}
 	//横軸グリッド
-	for (int i = 1; i < gridX; i++) {
-		DrawLine(0, gridLength * i, gridLength * gridX, gridLength * i, GetColor(255, 255, 255));
+	for (int i = 1; i < gridX * panelX; i++) {
+		if (i % gridX == 0) {
+			DrawLine(0, gridLength * i, gridLength * gridX * panelX, gridLength * i, GetColor(155, 0, 0), 5);
+		}
+		else {
+			DrawLine(0, gridLength * i, gridLength * gridX * panelX, gridLength * i, GetColor(200, 200, 200));
+		}
 	}
 
-	for (int i = 0; i < gridY; i++) {
-		for (int j = 0; j < gridX; j++) {
+	for (int i = 0; i < gridY * panelY; i++) {
+		for (int j = 0; j < gridX * panelX; j++) {
 			//壁
 			if (map[i][j] == -1) {
 				DrawBox(j * gridLength, i * gridLength, (j + 1) * gridLength, (i + 1) * gridLength, GetColor(255, 255, 255), true);
@@ -96,7 +128,7 @@ void Field::Draw()
 				int count = 0;
 
 				//右へのつながり
-				for (int k = j + 1; k < gridX; k++) {
+				for (int k = j + 1; k < gridX * panelX; k++) {
 					if (map[i][k] == -1) {
 						break;
 					}
@@ -106,7 +138,7 @@ void Field::Draw()
 					}
 				}
 				//下へのつながり
-				for (int k = i + 1; k < gridY; k++) {
+				for (int k = i + 1; k < gridY * panelY; k++) {
 					if (map[k][j] == -1) {
 						break;
 					}
@@ -206,7 +238,7 @@ bool Field::PullBlock(int y, int x, int moveDirection)
 		X = x - 1;
 		//一個左に何もなかったら
 		if (moveDirection == LEFT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
-			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
+			&& Y >= 0 && Y <= gridY * panelY - 1 && X >= 0 && X <= gridX * panelX - 1)
 		{
 			map[Y][X] = map[y][x];
 			map[y][x] = 0;
@@ -217,7 +249,7 @@ bool Field::PullBlock(int y, int x, int moveDirection)
 		X = x;
 		//一個上に何もなかったら
 		if (moveDirection == UP && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
-			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
+			&& Y >= 0 && Y <= gridY * panelY - 1 && X >= 0 && X <= gridX * panelX - 1)
 		{
 			map[Y][X] = map[y][x];
 			map[y][x] = 0;
@@ -228,7 +260,7 @@ bool Field::PullBlock(int y, int x, int moveDirection)
 		X = x + 1;
 		//一個左に何もなかったら
 		if (moveDirection == RIGHT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
-			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
+			&& Y >= 0 && Y <= gridY * panelY - 1 && X >= 0 && X <= gridX * panelX - 1)
 		{
 			map[Y][X] = map[y][x];
 			map[y][x] = 0;
@@ -239,7 +271,7 @@ bool Field::PullBlock(int y, int x, int moveDirection)
 		X = x;
 		//一個左に何もなかったら
 		if (moveDirection == DOWN && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
-			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
+			&& Y >= 0 && Y <= gridY * panelY - 1 && X >= 0 && X <= gridX * panelX - 1)
 		{
 			map[Y][X] = map[y][x];
 			map[y][x] = 0;
@@ -261,7 +293,7 @@ bool Field::GetPullBlock(int y, int x, int moveDirection)
 		X = x - 1;
 		//一個左に何もなかったら
 		if (moveDirection == LEFT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
-			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
+			&& Y >= 0 && Y <= gridY * panelY - 1 && X >= 0 && X <= gridX * panelX - 1)
 		{
 			return true;
 		}
@@ -270,7 +302,7 @@ bool Field::GetPullBlock(int y, int x, int moveDirection)
 		X = x;
 		//一個上に何もなかったら
 		if (moveDirection == UP && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
-			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
+			&& Y >= 0 && Y <= gridY * panelY - 1 && X >= 0 && X <= gridX * panelX - 1)
 		{
 			return true;
 		}
@@ -279,7 +311,7 @@ bool Field::GetPullBlock(int y, int x, int moveDirection)
 		X = x + 1;
 		//一個左に何もなかったら
 		if (moveDirection == RIGHT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
-			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
+			&& Y >= 0 && Y <= gridY * panelY - 1 && X >= 0 && X <= gridX * panelX - 1)
 		{
 			return true;
 		}
@@ -288,7 +320,7 @@ bool Field::GetPullBlock(int y, int x, int moveDirection)
 		X = x;
 		//一個左に何もなかったら
 		if (moveDirection == DOWN && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
-			&& Y >= 0 && Y <= gridY - 1 && X >= 0 && X <= gridX - 1)
+			&& Y >= 0 && Y <= gridY * panelY - 1 && X >= 0 && X <= gridX * panelX - 1)
 		{
 			return true;
 		}
