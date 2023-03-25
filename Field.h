@@ -56,7 +56,7 @@ public:
 	void SetMapNum(int x, int y, int num);
 
 	//進める場所か返す
-	static bool CanMoveGrid(int y, int x,int moveDirection);
+	static bool CanMoveGrid(int y, int x, int moveDirection);
 	//playerがブロックとか押す用
 	static bool PullBlock(int y, int x, int moveDirection);
 	//押せるかどうかだけ（移動したりはしない）
@@ -64,11 +64,12 @@ public:
 
 public:
 	//マップ
-	static int map[gridY][gridX];
+	static int map[gridY * panelY][gridX * panelX];
+	int panelMap[panelY][panelX];
 
 	//アンドゥ用
 	static const int ANDO_MAP_CONST = 50;
-	int andoMap[ANDO_MAP_CONST][gridY][gridX];
+	int andoMap[ANDO_MAP_CONST][gridY * panelY][gridX * panelX];
 	Vector2 playerPos[ANDO_MAP_CONST];
 	bool andoMapActive[ANDO_MAP_CONST];
 	bool isAndo;
