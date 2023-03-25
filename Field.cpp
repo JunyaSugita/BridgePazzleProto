@@ -24,7 +24,7 @@ void Field::Initialize()
 	// ※初期の配線は書かなくて良い
 
 	int tempMap[gridY * panelY][gridX * panelX] = {
-		{00,00,00,00,00, 01,00,00,00,00},
+		{00,00,00,00,00, 11,00,00,00,01},
 		{00,00,00,00,00, 00,00,00,00,00},
 		{00,00,00,00,00, 00,00,00,30,00},
 		{00,00,00,00,00, 00,00,00,00,00},
@@ -53,6 +53,13 @@ void Field::Initialize()
 				for (int k = 0; k < gridY; k++) {
 					for (int l = 0; l < gridX; l++) {
 						SetMapNum(j * gridX + l, i * gridY + k, -1);
+					}
+				}
+			}
+			if (panelMap[i][j] == 0) {
+				for (int k = 0; k < gridY; k++) {
+					for (int l = 0; l < gridX; l++) {
+						SetMapNum(j * gridX + l, i * gridY + k, -2);
 					}
 				}
 			}
@@ -125,6 +132,12 @@ void Field::Draw()
 			//壁
 			if (map[i][j] == -1) {
 				DrawBox(j * gridLength, i * gridLength, (j + 1) * gridLength, (i + 1) * gridLength, GetColor(255, 255, 255), true);
+			}
+			//壁
+			if (map[i][j] == -2) {
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
+				DrawBox(j * gridLength, i * gridLength, (j + 1) * gridLength, (i + 1) * gridLength, GetColor(55, 55, 55), true);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 			}
 			else if (map[i][j] > 0 && map[i][j] < 20) {
 				///つながり
