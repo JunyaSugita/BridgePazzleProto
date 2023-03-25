@@ -70,6 +70,7 @@ public:
 	//アンドゥ用
 	static const int ANDO_MAP_CONST = 50;
 	int andoMap[ANDO_MAP_CONST][gridY * panelY][gridX * panelX];
+	int andoPanelMap[ANDO_MAP_CONST][panelY][panelX];
 	Vector2 playerPos[ANDO_MAP_CONST];
 	bool andoMapActive[ANDO_MAP_CONST];
 	bool isAndo;

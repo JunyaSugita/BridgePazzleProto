@@ -25,6 +25,11 @@ void Generator::Initialize(Field* field)
 			field_->playerPos[0] = Vector2(25, 25);
 		}
 	}
+	for (int j = 0; j < panelY; j++) {
+		for (int k = 0; k < panelX; k++) {
+			field_->andoPanelMap[0][j][k] = field_->panelMap[j][k];
+		}
+	}
 }
 
 void Generator::Update(Field* field)
@@ -61,14 +66,19 @@ void Generator::Update(Field* field)
 		}
 	}
 	//違ったら記録
-	if (dif) {
+	if (dif && have_ == false) {
 		for (int i = 0; i < field_->ANDO_MAP_CONST; i++) {
 			if (field_->andoMapActive[i] == false) {
 				field_->andoMapActive[i] = true;
 				for (int j = 0; j < gridY * panelY; j++) {
 					for (int k = 0; k < gridX * panelX; k++) {
 						field_->andoMap[i][j][k] = field_->map[j][k];
-						field_->playerPos[i] = Player::GetInstance().GetEndPos();
+						field_->playerPos[i] = Player::GetInstance().GetPos();
+					}
+				}
+				for (int j = 0; j < panelY; j++) {
+					for (int k = 0; k < panelX; k++) {
+						field_->andoPanelMap[i][j][k] = field_->panelMap[j][k];
 					}
 				}
 				break;
@@ -89,6 +99,9 @@ void Generator::Update(Field* field)
 				for (int j = 0; j < gridY; j++) {
 					haveNum_[j][i] = field_->GetMapNum(mouseMapPointX * gridX + i, mouseMapPointY * gridY + j);
 					field_->SetMapNum(mouseMapPointX * gridX + i, mouseMapPointY * gridY + j, -2);
+					if (Player::GetInstance().GetPosGridX() == mouseMapPointX * gridX + i && Player::GetInstance().GetPosGridY() == mouseMapPointY * gridY + j) {
+						haveNum_[j][i] = -3;
+					}
 				}
 			}
 
@@ -113,6 +126,7 @@ void Generator::Update(Field* field)
 				}
 			}
 
+
 			//持っているフラグをfalseに
 			have_ = false;
 			//パネル操作
@@ -124,6 +138,11 @@ void Generator::Update(Field* field)
 			//何も持ってないことにする
 			for (int i = 0; i < gridX; i++) {
 				for (int j = 0; j < gridY; j++) {
+					//プレイヤーなら移動
+					if (haveNum_[j][i] == -3) {
+						Player::GetInstance().SetPosGrid(mouseMapPointY * gridY + j, mouseMapPointX * gridX + i);
+						haveNum_[j][i] = 0;
+					}
 					field_->SetMapNum(mouseMapPointX * gridX + i, mouseMapPointY * gridY + j, haveNum_[j][i]);
 					haveNum_[j][i] = 0;
 				}

@@ -92,6 +92,11 @@ void Field::Update()
 							andoMapActive[i] = false;
 						}
 					}
+					for (int j = 0; j < panelY; j++) {
+						for (int k = 0; k < panelX; k++) {
+							panelMap[j][k] = andoPanelMap[i - 1][j][k];
+						}
+					}
 					break;
 				}
 			}
