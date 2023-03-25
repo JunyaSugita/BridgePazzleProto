@@ -4,6 +4,7 @@
 #include "GrovalSetting.h"
 #include "Player.h"
 #include "KeyboardInput.h"
+#include "MapCSVLoader.h"
 
 // ウィンドウのタイトルに表示する文字列
 const char TITLE[] = "BridgePazzleProto";
@@ -47,6 +48,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SetFontSize(32);
 
 	// ゲームループで使う変数の宣言
+	MapCSVLoader::GetInstance().LoadCSV("Map");
+	SetGraphMode(gridX * panelX * 50, gridY * panelY * 50, 32);
+
 	Field* field = new Field();
 	field->Initialize();
 	Generator* generator = new Generator();
