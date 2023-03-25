@@ -88,7 +88,7 @@ void Generator::Update(Field* field)
 			for (int i = 0; i < gridX; i++) {
 				for (int j = 0; j < gridY; j++) {
 					haveNum_[j][i] = field_->GetMapNum(mouseMapPointX * gridX + i, mouseMapPointY * gridY + j);
-					field_->SetMapNum(mouseMapPointX * gridX + i, mouseMapPointY * gridY + j, 0);
+					field_->SetMapNum(mouseMapPointX * gridX + i, mouseMapPointY * gridY + j, -2);
 				}
 			}
 
