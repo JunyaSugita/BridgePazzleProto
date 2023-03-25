@@ -1,4 +1,5 @@
 #include "Field.h"
+#include "Player.h"
 
 int Field::map[gridY][gridX] = {};
 
@@ -54,10 +55,11 @@ void Field::Update()
 		if (isAndo == false) {
 			//1番新しい情報を探す
 			for (int i = ANDO_MAP_CONST - 1; i >= 0; i--) {
-				if (andoMapActive[i] == true) {
+				if (andoMapActive[i] == true && i != 0) {
 					for (int j = 0; j < gridY; j++) {
 						for (int k = 0; k < gridX; k++) {
-							map[j][k] = andoMap[i][j][k];
+							map[j][k] = andoMap[i - 1][j][k];
+							Player::GetInstance().SetPos(playerPos[i - 1]);
 							andoMapActive[i] = false;
 						}
 					}

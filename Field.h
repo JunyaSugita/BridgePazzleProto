@@ -1,6 +1,7 @@
 #pragma once
 #include "DxLib.h"
 #include "GrovalSetting.h"
+#include "Vector2.h"
 
 
 //進む方向用
@@ -68,6 +69,7 @@ public:
 	//アンドゥ用
 	static const int ANDO_MAP_CONST = 50;
 	int andoMap[ANDO_MAP_CONST][gridY][gridX];
+	Vector2 playerPos[ANDO_MAP_CONST];
 	bool andoMapActive[ANDO_MAP_CONST];
 	bool isAndo;
 
