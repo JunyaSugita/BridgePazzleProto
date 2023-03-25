@@ -1,4 +1,5 @@
 #include "Generator.h"
+#include "Player.h"
 
 Generator::Generator()
 {
@@ -15,6 +16,15 @@ void Generator::Initialize(Field* field)
 
 	//すでにあるやつをつなぐ
 	ConnectGenerator();
+
+	//最初の情報を記録
+	field_->andoMapActive[0] = true;
+	for (int j = 0; j < gridY; j++) {
+		for (int k = 0; k < gridX; k++) {
+			field_->andoMap[0][j][k] = field_->map[j][k];
+			field_->playerPos[0] = Vector2(25,25);
+		}
+	}
 }
 
 void Generator::Update(Field* field)
@@ -29,8 +39,42 @@ void Generator::Update(Field* field)
 
 	//繋がりを消す
 	Disconnectgenerator();
+
 	//すでにあるやつをつなぐ
 	ConnectGenerator();
+
+	//前フレームと発電機の場所が違ったらando用に記録
+	bool dif = false;
+
+	//1番新しい情報を探す
+	for (int i = field_->ANDO_MAP_CONST - 1; i >= 0; i--) {
+		if (field_->andoMapActive[i] == true) {
+			for (int j = 0; j < gridY; j++) {
+				for (int k = 0; k < gridX; k++) {
+					//違っているか判定
+					if (field_->map[j][k] != field_->andoMap[i][j][k]) {
+						dif = true;
+					}
+				}
+			}
+			break;
+		}
+	}
+	//違ったら記録
+	if (dif) {
+		for (int i = 0; i < field_->ANDO_MAP_CONST; i++) {
+			if (field_->andoMapActive[i] == false) {
+				field_->andoMapActive[i] = true;
+				for (int j = 0; j < gridY; j++) {
+					for (int k = 0; k < gridX; k++) {
+						field_->andoMap[i][j][k] = field_->map[j][k];
+						field_->playerPos[i] = Player::GetInstance().GetEndPos();
+					}
+				}
+				break;
+			}
+		}
+	}
 
 	//クリックしている時
 	if ((GetMouseInput() & MOUSE_INPUT_LEFT) != 0) {
@@ -60,9 +104,6 @@ void Generator::Update(Field* field)
 				have_ = true;
 				//マップ情報から持ち上げた情報を削除
 				field_->SetMapNum(mouseMapPointX, mouseMapPointY, 0);
-
-				//Disconnectgenerator();
-				
 			}
 		}
 	}
@@ -71,12 +112,6 @@ void Generator::Update(Field* field)
 	else if (have_ == true) {
 		//発電機を置く場所が空白の場所では無い時
 		if (field_->GetMapNum(mouseMapPointX, mouseMapPointY) != 0) {
-			for (int i = field_->ANDO_MAP_CONST - 1; i >= 0; i--) {
-				if (field_->andoMapActive[i] == true) {
-					field_->andoMapActive[i] = false;
-					break;
-				}
-			}
 			//発電機を元の位置に戻す
 			field_->SetMapNum(oldHavePosX_, oldHavePosY_, haveNum_);
 			//何も持ってないことにする
@@ -86,7 +121,6 @@ void Generator::Update(Field* field)
 		}
 		//発電機を置く場所が空白の時
 		else {
-
 			//クリックをやめた場所に発電機を設置
 			field_->SetMapNum(mouseMapPointX, mouseMapPointY, haveNum_);
 			//何も持ってないことにする
@@ -209,68 +243,6 @@ void Generator::ConnectGenerator()
 
 void Generator::Disconnectgenerator()
 {
-	////繋がり検索
-	////上
-	//for (int i = mouseMapPointY - 1; i >= 0; i--) {
-	//	//縦線を消す
-	//	if (field_->GetMapNum(mouseMapPointX, i) == 20) {
-	//		field_->SetMapNum(mouseMapPointX, i, 0);
-	//	}
-	//	//十字なら横線にする
-	//	else if (field_->GetMapNum(mouseMapPointX, i) == 22) {
-	//		field_->SetMapNum(mouseMapPointX, i, 21);
-	//	}
-	//	//線でなければ終了
-	//	else {
-	//		break;
-	//	}
-	//}
-	////下
-	//for (int i = mouseMapPointY + 1; i < gridY; i++) {
-	//	//縦線を消す
-	//	if (field_->GetMapNum(mouseMapPointX, i) == 20) {
-	//		field_->SetMapNum(mouseMapPointX, i, 0);
-	//	}
-	//	//十字なら横線にする
-	//	else if (field_->GetMapNum(mouseMapPointX, i) == 22) {
-	//		field_->SetMapNum(mouseMapPointX, i, 21);
-	//	}
-	//	//線でなければ終了
-	//	else {
-	//		break;
-	//	}
-	//}
-	////左
-	//for (int i = mouseMapPointX - 1; i >= 0; i--) {
-	//	//横線を消す
-	//	if (field_->GetMapNum(i, mouseMapPointY) == 21) {
-	//		field_->SetMapNum(i, mouseMapPointY, 0);
-	//	}
-	//	//十字なら縦線にする
-	//	else if (field_->GetMapNum(i, mouseMapPointY) == 22) {
-	//		field_->SetMapNum(i, mouseMapPointY, 20);
-	//	}
-	//	//線でなければ終了
-	//	else {
-	//		break;
-	//	}
-	//}
-	////下
-	//for (int i = mouseMapPointX + 1; i < gridY; i++) {
-	//	//横線を消す
-	//	if (field_->GetMapNum(i, mouseMapPointY) == 21) {
-	//		field_->SetMapNum(i, mouseMapPointY, 0);
-	//	}
-	//	//十字なら縦線にする
-	//	else if (field_->GetMapNum(i, mouseMapPointY) == 22) {
-	//		field_->SetMapNum(i, mouseMapPointY, 20);
-	//	}
-	//	//線でなければ終了
-	//	else {
-	//		break;
-	//	}
-	//}
-
 	for (int i = 0; i < gridY; i++) {
 		for (int j = 0; j < gridX; j++) {
 			if (field_->GetMapNum(j, i) == 20) {
