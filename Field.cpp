@@ -2,6 +2,7 @@
 #include "Player.h"
 
 int Field::map[gridY * panelY][gridX * panelX] = {};
+int Field::panelMap[panelY][panelX] = {};
 
 Field::Field()
 {
@@ -26,7 +27,7 @@ void Field::Initialize()
 	int tempMap[gridY * panelY][gridX * panelX] = {
 		{00,00,00,00,00, 11,00,00,00,01},
 		{00,00,00,00,00, 00,00,00,00,00},
-		{00,00,00,00,00, 00,00,00,30,00},
+		{00,00,01,00,00, 00,00,00,30,00},
 		{00,00,00,00,00, 00,00,00,00,00},
 		{01,00,00,00,00, 01,00,00,00,00}
 	};
@@ -269,9 +270,9 @@ bool Field::PullBlock(int y, int x, int moveDirection)
 
 		Y = y;
 		X = x - 1;
-		//一個左に何もなかったら
-		if (moveDirection == LEFT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
-			&& Y >= 0 && Y <= gridY * panelY - 1 && X >= 0 && X <= gridX * panelX - 1)
+		//一個左に何もなかったら(左右に押しているとき、横配線なら自分の出している配線なので押せる)
+		if (moveDirection == LEFT && (map[Y][X] == 0 || map[Y][X] == 21)
+			&& CanMovePanel(Y, X))
 		{
 			map[Y][X] = map[y][x];
 			map[y][x] = 0;
@@ -280,9 +281,9 @@ bool Field::PullBlock(int y, int x, int moveDirection)
 
 		Y = y - 1;
 		X = x;
-		//一個上に何もなかったら
-		if (moveDirection == UP && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
-			&& Y >= 0 && Y <= gridY * panelY - 1 && X >= 0 && X <= gridX * panelX - 1)
+		//一個上に何もなかったら(上下に押しているとき、縦配線なら自分の出している配線なので押せる)
+		if (moveDirection == UP && (map[Y][X] == 0 || map[Y][X] == 20)
+			&& CanMovePanel(Y, X))
 		{
 			map[Y][X] = map[y][x];
 			map[y][x] = 0;
@@ -292,8 +293,8 @@ bool Field::PullBlock(int y, int x, int moveDirection)
 		Y = y;
 		X = x + 1;
 		//一個左に何もなかったら
-		if (moveDirection == RIGHT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
-			&& Y >= 0 && Y <= gridY * panelY - 1 && X >= 0 && X <= gridX * panelX - 1)
+		if (moveDirection == RIGHT && (map[Y][X] == 0 || map[Y][X] == 21)
+			&& CanMovePanel(Y, X))
 		{
 			map[Y][X] = map[y][x];
 			map[y][x] = 0;
@@ -303,8 +304,8 @@ bool Field::PullBlock(int y, int x, int moveDirection)
 		Y = y + 1;
 		X = x;
 		//一個左に何もなかったら
-		if (moveDirection == DOWN && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
-			&& Y >= 0 && Y <= gridY * panelY - 1 && X >= 0 && X <= gridX * panelX - 1)
+		if (moveDirection == DOWN && (map[Y][X] == 0 || map[Y][X] == 20)
+			&& CanMovePanel(Y, X))
 		{
 			map[Y][X] = map[y][x];
 			map[y][x] = 0;
@@ -324,36 +325,36 @@ bool Field::GetPullBlock(int y, int x, int moveDirection)
 
 		Y = y;
 		X = x - 1;
-		//一個左に何もなかったら
-		if (moveDirection == LEFT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
-			&& Y >= 0 && Y <= gridY * panelY - 1 && X >= 0 && X <= gridX * panelX - 1)
+		//一個左に何もなかったら(左右に押しているとき、横配線なら自分の出している配線なので押せる)
+		if (moveDirection == LEFT && (map[Y][X] == 0 || map[Y][X] == 21)
+			&& CanMovePanel(Y, X))
 		{
 			return true;
 		}
 
 		Y = y - 1;
 		X = x;
-		//一個上に何もなかったら
-		if (moveDirection == UP && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
-			&& Y >= 0 && Y <= gridY * panelY - 1 && X >= 0 && X <= gridX * panelX - 1)
+		//一個上に何もなかったら(上下に押しているとき、縦配線なら自分の出している配線なので押せる)
+		if (moveDirection == UP && (map[Y][X] == 0 || map[Y][X] == 20)
+			&& CanMovePanel(Y, X))
 		{
 			return true;
 		}
 
 		Y = y;
 		X = x + 1;
-		//一個左に何もなかったら
-		if (moveDirection == RIGHT && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
-			&& Y >= 0 && Y <= gridY * panelY - 1 && X >= 0 && X <= gridX * panelX - 1)
+		//一個左に何もなかったら(左右に押しているとき、横配線なら自分の出している配線なので押せる)
+		if (moveDirection == RIGHT && (map[Y][X] == 0 || map[Y][X] == 21)
+			&& CanMovePanel(Y, X))
 		{
 			return true;
 		}
 
 		Y = y + 1;
 		X = x;
-		//一個左に何もなかったら
-		if (moveDirection == DOWN && (map[Y][X] == 0 || map[Y][X] == 20 || map[Y][X] == 21 || map[Y][X] == 22)
-			&& Y >= 0 && Y <= gridY * panelY - 1 && X >= 0 && X <= gridX * panelX - 1)
+		//一個左に何もなかったら(上下に押しているとき、縦配線なら自分の出している配線なので押せる)
+		if (moveDirection == DOWN && (map[Y][X] == 0 || map[Y][X] == 20)
+			&& CanMovePanel(Y, X))
 		{
 			return true;
 		}
@@ -362,17 +363,46 @@ bool Field::GetPullBlock(int y, int x, int moveDirection)
 	return false;
 }
 
+bool Field::GetInStage(int y, int x)
+{
+	if (y >= 0 && y < gridY * panelY && x >= 0 && x < gridX * panelX)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 bool Field::CanMoveGrid(int y, int x, int moveDirection)
 {
+	//パネルがない場所には行けない
+	if (!CanMovePanel(y, x))
+	{
+		return false;
+	}
 	//ブロックがあっても押せたら
 	if (GetPullBlock(y, x, moveDirection))
 	{
 		return true;
 	}
-	//押せなかったら
+	//そこにパネルがあり、押せなかったら、ブロック等がなければ進める
 	if (map[y][x] != 1 && map[y][x] != 11 && map[y][x] != -1 && map[y][x] != 20 && map[y][x] != 21 && map[y][x] != 22)
 	{
 		return true;
 	}
+	return false;
+}
+
+bool Field::CanMovePanel(int y, int x)
+{
+	int allGridY = (gridY);
+	int allGridX = (gridX);
+
+	//何もなかったら
+	if (panelMap[y / allGridY][x / allGridX] == 1 && GetInStage(y, x))
+	{
+		return true;
+	}
+
 	return false;
 }

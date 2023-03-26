@@ -57,15 +57,19 @@ public:
 
 	//進める場所か返す
 	static bool CanMoveGrid(int y, int x, int moveDirection);
+	//進めるパネル可動化返す
+	static bool CanMovePanel(int y, int x);
 	//playerがブロックとか押す用
 	static bool PullBlock(int y, int x, int moveDirection);
 	//押せるかどうかだけ（移動したりはしない）
 	static bool GetPullBlock(int y, int x, int moveDirection);
+	//ステージ内にいるか
+	static bool GetInStage(int y, int x);
 
 public:
 	//マップ
 	static int map[gridY * panelY][gridX * panelX];
-	int panelMap[panelY][panelX];
+	static int panelMap[panelY][panelX];
 
 	//アンドゥ用
 	static const int ANDO_MAP_CONST = 50;
