@@ -129,48 +129,58 @@ void Player::Initialize()
 	startPos = { 0,0 };
 	endPos = { 0,0 };
 	moveKey = NONE;
+	priorityKey = NONE;
 
 	ChangeState(new PlayerStateNotMoving);
 }
 
+void Player::Move(int key)
+{
+	isMoving = true;
+	moveKey = (key);
+}
+
 void Player::Update()
 {
-	//ちゃんとならない（移動中にキー押すと）
 	if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_LEFT) ||
 		KeyboardInput::Getinstance().GetKey(KEY_INPUT_UP) ||
 		KeyboardInput::Getinstance().GetKey(KEY_INPUT_RIGHT) ||
-		KeyboardInput::Getinstance().GetKey(KEY_INPUT_DOWN))
+		KeyboardInput::Getinstance().GetKey(KEY_INPUT_DOWN) ||
+		KeyboardInput::Getinstance().GetKey(KEY_INPUT_A) ||
+		KeyboardInput::Getinstance().GetKey(KEY_INPUT_W) ||
+		KeyboardInput::Getinstance().GetKey(KEY_INPUT_D) ||
+		KeyboardInput::Getinstance().GetKey(KEY_INPUT_S)
+		)
 	{
 		int x = GetPosGridX();
 		int y = GetPosGridY();
 
-		if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_LEFT) && Field::CanMoveGrid(y, x - 1, LEFT))
+		if ((KeyboardInput::Getinstance().GetKey(KEY_INPUT_LEFT) || KeyboardInput::Getinstance().GetKey(KEY_INPUT_A))
+			&& Field::CanMoveGrid(y, x - 1, LEFT))
 		{
-			isMoving = true;
-			moveKey = (LEFT);
+			Move(LEFT);
 		}
-		if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_UP) && Field::CanMoveGrid(y - 1, x, UP))
+		if ((KeyboardInput::Getinstance().GetKey(KEY_INPUT_UP) || KeyboardInput::Getinstance().GetKey(KEY_INPUT_W))
+			&& Field::CanMoveGrid(y - 1, x, UP))
 		{
-			isMoving = true;
-			moveKey = (UP);
+			Move(UP);
 		}
-		if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_RIGHT) && Field::CanMoveGrid(y, x + 1, RIGHT))
+		if ((KeyboardInput::Getinstance().GetKey(KEY_INPUT_RIGHT) || KeyboardInput::Getinstance().GetKey(KEY_INPUT_D))
+			&& Field::CanMoveGrid(y, x + 1, RIGHT))
 		{
-			isMoving = true;
-			moveKey = (RIGHT);
+			Move(RIGHT);
 		}
-		if (KeyboardInput::Getinstance().GetKey(KEY_INPUT_DOWN) && Field::CanMoveGrid(y + 1, x, DOWN))
+		if ((KeyboardInput::Getinstance().GetKey(KEY_INPUT_DOWN) || KeyboardInput::Getinstance().GetKey(KEY_INPUT_S))
+			&& Field::CanMoveGrid(y + 1, x, DOWN))
 		{
-			isMoving = true;
-			moveKey = (DOWN);
+			Move(DOWN);
 		}
 	}
+	//キーが押されてない
 	else
 	{
-		moveKey = NONE;
+		moveKey = false;
 	}
-
-
 
 	//ステート
 	state->Update();

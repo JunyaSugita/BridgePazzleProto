@@ -69,6 +69,7 @@ private:
 	//進む長さ
 	const int moveLength = Field::gridLength;
 	//最後に押されたキー
+	int priorityKey = NONE;
 	int moveKey = NONE;
 
 public:
@@ -114,6 +115,8 @@ public:
 	int GetMoveLength() { return moveLength; }
 	//移動終わった時に呼び出す
 	void MoveEndFunc();
+	//
+	void Move(int key);
 
 public:
 	void Initialize();
