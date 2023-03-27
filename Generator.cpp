@@ -162,8 +162,10 @@ void Generator::Draw()
 		//DrawCircle(mouseX, mouseY, field_->gridLength / 2, GetColor(255, 255, 255));
 	}
 	else {
-		DrawFormatString(100, 0, GetColor(255, 255, 255), "RIGHT_CLICK : ANDO");
+		DrawFormatString(0, 400, GetColor(200, 0, 0), "RIGHT_CLICK : ANDO");
 	}
+	DrawFormatString(0, 440, GetColor(200, 0, 0), "WASD : PlayerMove");
+	DrawFormatString(0, 480, GetColor(200, 0, 0), "LEFT_CLICK & Drag : PanelMove");
 }
 
 void Generator::ConnectGenerator()
